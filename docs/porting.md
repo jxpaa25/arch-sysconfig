@@ -28,3 +28,26 @@ Decisions and differences to carry into Step 3, the port of the Omarchy-based co
   `wl-copy --sensitive` so passwords stay out of it. A plain `pass -c` in a terminal doesn't mark its copy
   as sensitive, so a password copied that way does land in the history. Use the picker, or
   `cliphist wipe` afterwards.
+
+## The shell, compared with Omarchy's
+
+About 4,700 lines of QML against Omarchy's 48,000, because it hard-codes your layout instead of hosting
+plugins. What that leaves out:
+
+- The bar's layout lives in `Bar/Bar.qml`. There's no dragging widgets around, moving the bar to another edge,
+  or glass and clear backgrounds.
+- The tray has no pinning. Everything sits in the drawer behind the chevron. UNTESTED: nothing in the VM
+  puts an icon in the tray.
+- The world clock is a list of your cities, with no globe, search or daylight strip. Edit them in
+  `Commons/Settings.qml`.
+- The network panel has no DNS provider picker, Wi-Fi QR code or speed test. "Connection settings" opens
+  `nmtui` for anything else. UNTESTED for Wi-Fi: the VM only has a wired device.
+- The power panel shows the battery and power profile, without the system info section.
+- The lock screen has no fingerprint support and no clock. Wrong passwords lock you out for 2 minutes after
+  10 tries.
+- The clipboard list shows images by their size, with no thumbnails. Emoji are a list, not a grid.
+- The menu has no Install or Remove section, and no font picker.
+- Notifications have no grouping, and don't focus the sending window when clicked unless the app asks.
+- The share menu appears empty unless LocalSend is installed.
+- Text shows as coloured fringes on VM screenshots. That's subpixel antialiasing in the VM's terminal fonts
+  and needs checking on real hardware.
