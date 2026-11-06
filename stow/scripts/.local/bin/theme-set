@@ -49,6 +49,7 @@ fi
 pkill -USR2 -x ghostty || true
 pkill -USR2 -x btop || true
 pkill -USR1 -x helix || true
+qs ipc call shell reloadTheme >/dev/null 2>&1 || true
 if [[ -n ${HYPRLAND_INSTANCE_SIGNATURE:-} ]]; then
   hyprctl reload >/dev/null
 fi

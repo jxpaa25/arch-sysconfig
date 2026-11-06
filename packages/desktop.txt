@@ -14,8 +14,12 @@ xdg-user-dirs
 gnome-themes-extra
 xdg-utils
 
-# Bar and shell
+# Bar and shell. upower and power-profiles-daemon feed the power panel, pacman-contrib
+# provides checkupdates for the bar.
 quickshell
+upower
+power-profiles-daemon
+pacman-contrib
 
 # Audio. pipewire-jack is listed so the solver doesn't pick jack2 instead.
 pipewire

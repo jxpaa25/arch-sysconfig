@@ -1,0 +1,15 @@
+#!/bin/bash
+# Memory usage %, based on MemAvailable (matches what `free` reports as "used").
+set -euo pipefail
+
+icon="󰍛"
+
+awk -v icon="$icon" '
+/^MemTotal:/     { total = $2 }
+/^MemAvailable:/ { avail = $2 }
+END {
+  used = total - avail
+  pct = (total > 0) ? (100 * used / total) : 0
+  printf "{\"text\":\"%s %.0f%%\",\"tooltip\":\"Memory: %.1f / %.1f GiB (%.0f%% used)\"}\n", \
+    icon, pct, used / 1048576, total / 1048576, pct
+}' /proc/meminfo

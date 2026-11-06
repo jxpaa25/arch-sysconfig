@@ -1,0 +1,14 @@
+#!/bin/bash
+# Private (LAN) IP of the interface currently used for the default route.
+set -euo pipefail
+
+icon="󰩟"
+
+iface=$(ip route get 1.1.1.1 2>/dev/null | awk '{ for (i = 1; i <= NF; i++) if ($i == "dev") { print $(i + 1); exit } }')
+addr=$(ip -4 addr show "${iface:-lo}" 2>/dev/null | awk '/inet /{ print $2; exit }' | cut -d/ -f1)
+
+if [ -z "$addr" ]; then
+  printf '{"text":"%s N/A","tooltip":"Private IP: unavailable"}\n' "$icon"
+else
+  printf '{"text":"%s %s","tooltip":"Private IP (%s): %s"}\n' "$icon" "$addr" "$iface" "$addr"
+fi

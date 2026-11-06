@@ -1,0 +1,26 @@
+#!/bin/bash
+# Disk usage % for a filesystem, labelled by the kind of disk it's on.
+# Prints nothing when the mount is on the same filesystem as /, so a machine with one disk
+# gets one readout. Usage: disk-usage [mountpoint]
+set -euo pipefail
+
+mount="${1:-/}"
+
+# btrfs subvolumes show up as /dev/x[/subvol], so compare the part before the bracket.
+source_of() { findmnt -no SOURCE -T "$1" | sed 's/\[.*//'; }
+
+src=$(source_of "$mount")
+if [[ $mount != / && $src == "$(source_of /)" ]]; then
+  exit 0
+fi
+
+# lsblk lists a device before its parents, and an encrypted disk reports through them too.
+if [[ $(lsblk -sno ROTA "$src" 2>/dev/null | tail -n1 | tr -d ' ') == 1 ]]; then
+  icon="" label="HDD"
+else
+  icon="󰋊" label="SSD"
+fi
+
+read -r pct used total <<<"$(df -h --output=pcent,used,size "$mount" | tail -n1 | tr -d '%')"
+
+printf '{"text":"%s %s%%","tooltip":"%s (%s): %s used of %s"}\n' "$icon" "$pct" "$label" "$mount" "$used" "$total"

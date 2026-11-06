@@ -1,0 +1,14 @@
+#!/bin/bash
+# Ping latency to a public probe, as a quick internet-reachability check.
+set -euo pipefail
+
+icon="󰓅"
+probe="1.1.1.1"
+
+ms=$(LC_ALL=C ping -n -c 1 -W 1 "$probe" 2>/dev/null | awk -F'time[=<]' '/time[=<]/ { split($2, a, " "); print a[1]; exit }')
+
+if [ -z "$ms" ]; then
+  printf '{"text":"%s --","tooltip":"Ping (%s): timeout"}\n' "$icon" "$probe"
+else
+  printf '{"text":"%s %sms","tooltip":"Ping (%s): %s ms"}\n' "$icon" "$ms" "$probe" "$ms"
+fi
