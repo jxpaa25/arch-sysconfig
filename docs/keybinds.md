@@ -7,7 +7,7 @@ comparing against the live list, so nothing is missing.
 - **port**: same key and behaviour, but it needs a small script of ours or a Quickshell feature.
 - **drop**: goes away.
 
-Totals: 127 keep, 70 port, 44 drop. Lid-switch handling has no label so it isn't counted here. It gets ported as a script.
+Totals: 127 keep, 68 port, 46 drop. Lid-switch handling has no label so it isn't counted here. It gets ported as a script.
 
 ## Windows
 

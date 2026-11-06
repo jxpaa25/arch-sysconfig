@@ -66,4 +66,4 @@ done
 
 rebuild_initramfs_if_needed
 
-info "Done. Reboot to apply everything."
+info "Done. Reboot to apply everything, then run tests/verify.sh from the desktop."
