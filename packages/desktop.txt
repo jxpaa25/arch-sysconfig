@@ -7,8 +7,11 @@ hyprland-guiutils
 hyprpicker
 hyprsunset
 wl-clipboard
+brightnessctl
+playerctl
 gnome-keyring
 xdg-user-dirs
+gnome-themes-extra
 xdg-utils
 
 # Bar and shell

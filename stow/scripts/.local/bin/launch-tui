@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+# Run a TUI in its own terminal window, with an app-id that window rules can match.
+# Usage: launch-tui [--app-id=ID] command [args...]
+if [[ ${1:-} == --app-id=* ]]; then
+  app_id=${1#--app-id=}
+  shift
+else
+  app_id="org.desk.$(basename "$1")"
+fi
+exec setsid uwsm-app -- xdg-terminal-exec --app-id="$app_id" -e "$@"

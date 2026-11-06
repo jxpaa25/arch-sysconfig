@@ -1,0 +1,1 @@
+-- The test VM. A single virtual monitor, so the defaults are enough.

@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+# Open a terminal in the directory of the given terminal PID, or the focused window.
+# Usage: launch-terminal [--pid=PID] [command...]
+pid=""
+if [[ ${1:-} == --pid=* ]]; then
+  pid=${1#--pid=}
+  shift
+fi
+exec setsid uwsm-app -- xdg-terminal-exec --dir="$(terminal-cwd "$pid")" "$@"

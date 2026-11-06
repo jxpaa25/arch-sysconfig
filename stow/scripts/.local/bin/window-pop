@@ -1,0 +1,27 @@
+#!/usr/bin/env bash
+# Pop the focused window out: float, centre and pin it. Run again to put it back.
+set -euo pipefail
+
+width=${1:-1300}
+height=${2:-900}
+active=$(hyprctl activewindow -j)
+address=$(jq -r '.address // empty' <<<"$active")
+[[ -n $address ]] || exit 0
+window="address:$address"
+
+dispatch() {
+  hyprctl dispatch "$1" >/dev/null
+}
+
+if [[ $(jq '.pinned' <<<"$active") == true ]]; then
+  dispatch "hl.dsp.window.pin({ window = \"$window\" })"
+  dispatch "hl.dsp.window.float({ window = \"$window\", action = \"toggle\" })"
+  dispatch "hl.dsp.window.tag({ window = \"$window\", tag = \"-pop\" })"
+else
+  dispatch "hl.dsp.window.float({ window = \"$window\", action = \"toggle\" })"
+  dispatch "hl.dsp.window.resize({ window = \"$window\", x = $width, y = $height })"
+  dispatch "hl.dsp.window.center({ window = \"$window\" })"
+  dispatch "hl.dsp.window.pin({ window = \"$window\" })"
+  dispatch "hl.dsp.window.alter_zorder({ window = \"$window\", mode = \"top\" })"
+  dispatch "hl.dsp.window.tag({ window = \"$window\", tag = \"+pop\" })"
+fi

@@ -1,0 +1,56 @@
+#!/usr/bin/env bash
+# Control the laptop panel. UNTESTED until it runs on real hardware; the VM has no panel.
+# Usage: monitor-internal on|off|toggle|mirror|lid-closed
+set -euo pipefail
+
+toggles="$HOME/.local/state/desk/toggles"
+disable_flag="$toggles/internal-monitor-disable.lua"
+mirror_flag="$toggles/internal-monitor-mirror.lua"
+
+monitors=$(hyprctl monitors all -j)
+internal=$(jq -r '.[] | select(.name | test("^(eDP|LVDS|DSI)-")).name' <<<"$monitors" | head -n 1)
+external=$(jq -r '.[] | select(.name | test("^(eDP|LVDS|DSI)-") | not) | select(.disabled | not).name' <<<"$monitors" | head -n 1)
+
+mkdir -p "$toggles"
+
+on() {
+  rm -f "$disable_flag" "$mirror_flag"
+  hyprctl reload >/dev/null
+  hyprctl dispatch 'hl.dsp.dpms({ action = "enable" })' >/dev/null
+}
+
+off() {
+  # Never turn off the only display.
+  [[ -n $internal && -n $external ]] || return 0
+  rm -f "$mirror_flag"
+  printf 'hl.monitor({ output = "%s", disabled = true })\n' "$internal" >"$disable_flag"
+  hyprctl reload >/dev/null
+}
+
+mirror() {
+  [[ -n $internal && -n $external ]] || return 0
+  rm -f "$disable_flag"
+  if [[ -f $mirror_flag ]]; then
+    rm -f "$mirror_flag"
+  else
+    printf 'hl.monitor({ output = "%s", mode = "preferred", position = "auto", scale = 1, mirror = "%s" })\n' \
+      "$external" "$internal" >"$mirror_flag"
+  fi
+  hyprctl reload >/dev/null
+}
+
+case "${1:-}" in
+  on) on ;;
+  off) off ;;
+  toggle)
+    if [[ -f $disable_flag ]]; then on; else off; fi
+    ;;
+  mirror) mirror ;;
+  # With an external monitor, carry on with the lid closed. Without one, logind suspends
+  # the machine and the lock screen comes up first.
+  lid-closed) off ;;
+  *)
+    echo "Usage: monitor-internal on|off|toggle|mirror|lid-closed" >&2
+    exit 2
+    ;;
+esac

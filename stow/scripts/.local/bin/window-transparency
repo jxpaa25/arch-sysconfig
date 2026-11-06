@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+# Toggle transparency on the focused window.
+set -euo pipefail
+
+address=$(hyprctl activewindow -j | jq -r '.address // empty')
+[[ -n $address ]] || exit 0
+window="address:$address"
+
+if [[ $(hyprctl getprop "$window" opacity) == 1 && $(hyprctl getprop "$window" opacity_inactive) == 1 ]]; then
+  hyprctl dispatch "hl.dsp.window.tag({ window = \"$window\", tag = \"+transparent\" })" >/dev/null
+  hyprctl dispatch "hl.dsp.window.set_prop({ window = \"$window\", prop = \"opaque\", value = \"false\" })" >/dev/null
+else
+  hyprctl dispatch "hl.dsp.window.set_prop({ window = \"$window\", prop = \"opaque\", value = \"toggle\" })" >/dev/null
+fi

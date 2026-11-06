@@ -1,0 +1,33 @@
+#!/usr/bin/env bash
+# Print the working directory of a terminal's shell: the given terminal PID, or the
+# focused window. Falls back to $HOME, so new terminals always have somewhere to open.
+terminal_pid=${1:-$(hyprctl activewindow -j | jq -r '.pid // empty')}
+cwd=""
+shell_pid=""
+
+if [[ -n $terminal_pid ]]; then
+  for children_file in /proc/"$terminal_pid"/task/*/children; do
+    [[ -r $children_file ]] || continue
+    read -ra children <"$children_file" || true
+    for child in "${children[@]}"; do
+      ((child > ${shell_pid:-0})) && shell_pid=$child
+    done
+  done
+fi
+
+# A terminal's shell leads its own session on the terminal's pty. A shell started by some
+# other app, like a browser's download helper, doesn't, so that app gets $HOME.
+if [[ -n $shell_pid ]] && read -r stat 2>/dev/null <"/proc/$shell_pid/stat"; then
+  read -r _ _ _ session tty_nr _ <<<"${stat##*) }"
+  if ((session == shell_pid && tty_nr != 0)); then
+    cwd=$(readlink -f "/proc/$shell_pid/cwd" 2>/dev/null)
+    shell=$(readlink -f "/proc/$shell_pid/exe" 2>/dev/null)
+    grep -Fqsx "$shell" /etc/shells || cwd=""
+  fi
+fi
+
+if [[ -d $cwd ]]; then
+  echo "$cwd"
+else
+  echo "$HOME"
+fi

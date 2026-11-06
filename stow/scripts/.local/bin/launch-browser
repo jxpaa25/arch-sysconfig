@@ -1,0 +1,31 @@
+#!/usr/bin/env bash
+# Open the default browser. Usage: launch-browser [--private] [url...]
+set -euo pipefail
+
+desktop=$(xdg-settings get default-web-browser)
+IFS=: read -ra data_dirs <<<"${XDG_DATA_HOME:-$HOME/.local/share}:${XDG_DATA_DIRS:-/usr/local/share:/usr/share}"
+browser=""
+for dir in "${data_dirs[@]}"; do
+  if [[ -f $dir/applications/$desktop ]]; then
+    browser=$(sed -n 's/^Exec=\([^ ]*\).*/\1/p' "$dir/applications/$desktop" | head -1)
+    break
+  fi
+done
+[[ -n $browser ]] || {
+  notify-send "Browser" "No default browser found"
+  exit 1
+}
+
+args=()
+for arg in "$@"; do
+  if [[ $arg == --private ]]; then
+    case "$browser" in
+      *chrom*) args+=(--incognito) ;;
+      *) args+=(--private-window) ;;
+    esac
+  else
+    args+=("$arg")
+  fi
+done
+
+exec setsid uwsm-app -- "$browser" "${args[@]}"

@@ -1,0 +1,42 @@
+#!/usr/bin/env bash
+# Turn the touchpad on or off. UNTESTED until it runs on real hardware; the VM has none.
+# Usage: toggle-touchpad [on|off|toggle]
+set -euo pipefail
+
+state="$HOME/.local/state/desk/toggles/touchpad-disabled-name"
+device=$(hyprctl devices -j | jq -r '.mice[].name | select(test("touchpad|trackpad"; "i"))' | head -n 1)
+[[ -n $device ]] || {
+  echo "No touchpad found" >&2
+  exit 1
+}
+quoted=${device//\\/\\\\}
+quoted=${quoted//\"/\\\"}
+
+apply() {
+  hyprctl eval "hl.device({ name = \"$quoted\", enabled = $1 })" >/dev/null
+}
+
+on() {
+  rm -f "$state"
+  apply true
+  notify-send -u low "Touchpad on"
+}
+
+off() {
+  mkdir -p "$(dirname "$state")"
+  printf '%s\n' "$device" >"$state"
+  apply false
+  notify-send -u low "Touchpad off"
+}
+
+case "${1:-toggle}" in
+  on) on ;;
+  off) off ;;
+  toggle)
+    if [[ -f $state ]]; then on; else off; fi
+    ;;
+  *)
+    echo "Usage: toggle-touchpad [on|off|toggle]" >&2
+    exit 2
+    ;;
+esac

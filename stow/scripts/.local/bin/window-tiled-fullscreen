@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+# Toggle telling the app it's fullscreen while it stays tiled, for example a browser
+# showing a video full window.
+set -euo pipefail
+client=$(hyprctl activewindow -j | jq -r '.fullscreenClient // 0')
+if [[ $client == 2 ]]; then
+  hyprctl dispatch 'hl.dsp.window.fullscreen_state({ internal = 0, client = 0 })' >/dev/null
+else
+  hyprctl dispatch 'hl.dsp.window.fullscreen_state({ internal = 0, client = 2 })' >/dev/null
+fi

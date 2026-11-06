@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+# Close every window, then go back to the first workspace.
+hyprctl clients -j | jq -r '.[].address' | while read -r address; do
+  hyprctl dispatch "hl.dsp.window.close({ window = \"address:$address\" })" >/dev/null
+done
+hyprctl dispatch 'hl.dsp.focus({ workspace = "1" })' >/dev/null

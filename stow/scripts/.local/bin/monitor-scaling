@@ -1,0 +1,34 @@
+#!/usr/bin/env bash
+# Step the focused monitor's scale up or down, until the next login or config reload.
+# To keep a scale, set it in hypr/hosts/<hostname>.lua.
+set -euo pipefail
+
+scales=(1 1.25 1.6 2 3 4)
+direction=${1:-}
+[[ $direction == up || $direction == down ]] || {
+  echo "Usage: monitor-scaling up|down" >&2
+  exit 2
+}
+
+monitor=$(hyprctl monitors -j | jq -c '.[] | select(.focused == true)')
+current=$(jq -r '.scale' <<<"$monitor")
+
+new=""
+if [[ $direction == up ]]; then
+  for scale in "${scales[@]}"; do
+    if awk -v a="$scale" -v b="$current" 'BEGIN { exit !(a > b + 0.001) }'; then
+      new=$scale
+      break
+    fi
+  done
+else
+  for scale in "${scales[@]}"; do
+    if awk -v a="$scale" -v b="$current" 'BEGIN { exit !(a < b - 0.001) }'; then
+      new=$scale
+    fi
+  done
+fi
+[[ -n $new ]] || exit 0
+
+read -r name width height refresh < <(jq -r '"\(.name) \(.width) \(.height) \(.refreshRate)"' <<<"$monitor")
+hyprctl eval "hl.monitor({ output = \"$name\", mode = \"${width}x${height}@${refresh}\", position = \"auto\", scale = $new })" >/dev/null
