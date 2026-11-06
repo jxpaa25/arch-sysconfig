@@ -1,0 +1,47 @@
+#!/usr/bin/env bash
+# Start or stop a screen recording. Running it while recording stops and saves.
+# Usage: screen-record [--desktop] [--mic]
+set -euo pipefail
+
+dir="${XDG_VIDEOS_DIR:-$HOME/Videos}/Recordings"
+
+if pgrep -x gpu-screen-recorder >/dev/null; then
+  pkill -INT -x gpu-screen-recorder
+  qs ipc call status refresh >/dev/null 2>&1 || true
+  exit 0
+fi
+
+audio=()
+for arg in "$@"; do
+  case "$arg" in
+    --desktop) audio+=(default_output) ;;
+    --mic) audio+=(default_input) ;;
+    *)
+      echo "Usage: screen-record [--desktop] [--mic]" >&2
+      exit 2
+      ;;
+  esac
+done
+
+# Pick a region or monitor to record. Clicking a window records that window's area.
+geometry=$(hyprctl clients -j |
+  jq -r --argjson ws "$(hyprctl activeworkspace -j | jq '.id')" \
+    '.[] | select(.workspace.id == $ws and (.hidden | not)) | "\(.at[0]),\(.at[1]) \(.size[0])x\(.size[1])"' |
+  slurp -o) || exit 0
+[[ -n $geometry ]] || exit 0
+
+# gpu-screen-recorder takes WxH+X+Y.
+read -r x y w h < <(sed -E 's/^([0-9-]+),([0-9-]+) ([0-9]+)x([0-9]+).*$/\1 \2 \3 \4/' <<<"$geometry")
+
+mkdir -p "$dir"
+file="$dir/$(date +%Y-%m-%d_%H-%M-%S).mp4"
+args=(-w region -region "${w}x${h}+${x}+${y}" -f 60 -q very_high -o "$file")
+if ((${#audio[@]})); then
+  merged=$(IFS='|'; echo "${audio[*]}")
+  args+=(-a "$merged")
+fi
+
+# shellcheck disable=SC2016  # expanded by the inner bash
+setsid uwsm-app -- bash -c 'gpu-screen-recorder "$@"; notify-send -u low "Recording saved" "${@: -1}"' _ "${args[@]}" >/dev/null 2>&1 &
+sleep 0.5
+qs ipc call status refresh >/dev/null 2>&1 || true

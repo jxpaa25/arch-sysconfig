@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+# Pick a `pass` entry from the menu and copy its password. pass clears it after 45 seconds.
+shopt -s nullglob globstar
+
+prefix=${PASSWORD_STORE_DIR:-$HOME/.password-store}
+files=("$prefix"/**/*.gpg)
+files=("${files[@]#"$prefix"/}")
+files=("${files[@]%.gpg}")
+
+((${#files[@]})) || {
+  notify-send "pass" "No entries in $prefix"
+  exit 1
+}
+
+entry=$(printf '%s\n' "${files[@]}" | menu-pick "Passwords") || exit 0
+[[ -n $entry ]] || exit 0
+
+if pass show -c "$entry" >/dev/null 2>&1; then
+  notify-send "pass" "Copied $entry (clears in 45s)"
+else
+  notify-send "pass" "Failed to decrypt $entry"
+fi

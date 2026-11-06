@@ -71,3 +71,6 @@ hl.on("window.move_to_workspace", function(window, workspace)
     end
   end
 end)
+
+-- The shell's surfaces pop open with no compositor animation.
+hl.layer_rule({ match = { namespace = "^desk-" }, no_anim = true, animation = "none" })

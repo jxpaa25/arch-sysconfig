@@ -18,7 +18,7 @@ BarButton {
   active: true
 
   onClicked: {
-    Run.app("xdg-terminal-exec --app-id=org.desk.update bash -c 'yay -Syu; echo; read -rsn1 -p \"Done. Press any key to close.\"'")
+    Quickshell.execDetached(["launch-tui", "--app-id=org.desk.update", "bash", "-c", "yay -Syu; echo; read -rsn1 -p 'Done. Press any key to close.'"])
     count = 0
   }
 

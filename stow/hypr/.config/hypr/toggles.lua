@@ -1,7 +1,8 @@
 -- Settings changed at runtime by scripts, which keep them in ~/.local/state.
 
--- monitor-internal writes a generated rule here to turn the laptop panel off or mirror it.
-for _, name in ipairs({ "internal-monitor-disable", "internal-monitor-mirror" }) do
+-- monitor-internal writes a generated rule here to turn the laptop panel off or mirror it,
+-- and desktop-fullscreen one that removes the window gaps.
+for _, name in ipairs({ "internal-monitor-disable", "internal-monitor-mirror", "window-no-gaps" }) do
   local path = desk.toggles_dir .. "/" .. name .. ".lua"
   if desk.read_line(path) then
     dofile(path)

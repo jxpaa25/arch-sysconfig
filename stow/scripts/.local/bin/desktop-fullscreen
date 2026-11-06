@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+# Toggle a full screen desktop: hide the bar and remove the window gaps together.
+set -euo pipefail
+
+toggles="$HOME/.local/state/desk/toggles"
+flag="$toggles/window-no-gaps.lua"
+mkdir -p "$toggles"
+
+if [[ -f $flag ]]; then
+  rm -f "$flag"
+  qs ipc call shell setBarHidden false >/dev/null
+else
+  printf 'hl.config({ general = { gaps_in = 0, gaps_out = 0 } })\n' >"$flag"
+  qs ipc call shell setBarHidden true >/dev/null
+fi
+hyprctl reload >/dev/null

@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+# Select part of the screen, read its text with OCR and copy it to the clipboard.
+set -euo pipefail
+
+# Keep the screen frozen until grim has captured it.
+hyprpicker -r -z >/dev/null 2>&1 &
+freeze=$!
+trap 'kill "$freeze" 2>/dev/null || true' EXIT
+sleep 0.1
+
+selection=$(slurp 2>/dev/null) || exit 0
+[[ -n $selection ]] || exit 0
+
+text=$(grim -g "$selection" - | tesseract stdin stdout --oem 1 --psm 6 -l eng --dpi 300 2>/dev/null)
+if [[ -z $text ]]; then
+  notify-send -u low "No text found"
+  exit 0
+fi
+
+printf '%s' "$text" | wl-copy
+notify-send -u low "Text copied" "${text:0:120}"

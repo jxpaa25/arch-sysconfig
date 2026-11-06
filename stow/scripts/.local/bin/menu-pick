@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+# Ask the user to pick one line from stdin, in the shell's menu. Prints the chosen line,
+# or nothing if cancelled. Options are "label" or "label<TAB>hint".
+# Usage: printf 'one\ntwo\n' | menu-pick "Prompt"
+set -euo pipefail
+
+prompt="${1:-Pick}"
+dir=$(mktemp -d)
+trap 'rm -rf "$dir"' EXIT
+
+cat >"$dir/options"
+mkfifo "$dir/result"
+
+qs ipc call menu pick "$prompt" "$dir/options" "$dir/result" >/dev/null
+
+# Opened read-write so this can't hang forever if the shell goes away.
+exec 3<>"$dir/result"
+IFS= read -r -t 600 selection <&3 || exit 1
+[[ -n $selection ]] && printf '%s\n' "$selection"

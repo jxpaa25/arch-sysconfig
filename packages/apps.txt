@@ -10,3 +10,8 @@ slurp
 bluez
 bluez-utils
 bluetui
+
+# Screen recording and text from screenshots
+gpu-screen-recorder
+tesseract
+tesseract-data-eng
