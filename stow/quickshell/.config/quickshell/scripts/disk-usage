@@ -16,11 +16,11 @@ fi
 
 # lsblk lists a device before its parents, and an encrypted disk reports through them too.
 if [[ $(lsblk -sno ROTA "$src" 2>/dev/null | tail -n1 | tr -d ' ') == 1 ]]; then
-  icon="" label="HDD"
+  label="hdd"
 else
-  icon="󰋊" label="SSD"
+  label="ssd"
 fi
 
 read -r pct used total <<<"$(df -h --output=pcent,used,size "$mount" | tail -n1 | tr -d '%')"
 
-printf '{"text":"%s %s%%","tooltip":"%s (%s): %s used of %s"}\n' "$icon" "$pct" "$label" "$mount" "$used" "$total"
+printf '{"label":"%s","text":"%s%%","tooltip":"%s (%s): %s used of %s"}\n' "$label" "$pct" "${label^^}" "$mount" "$used" "$total"

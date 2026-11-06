@@ -24,6 +24,12 @@ Variants {
 
     HoverHandler { id: barHover }
 
+    Rectangle {
+      anchors { left: parent.left; right: parent.right; bottom: parent.bottom }
+      height: 1
+      color: Theme.withAlpha(Theme.bar.text, 0.15)
+    }
+
     Row {
       anchors { left: parent.left; top: parent.top; bottom: parent.bottom }
 
@@ -58,7 +64,6 @@ Variants {
       PowerButton { screenName: window.screenName }
       KeyboardLayout {}
       Clock { screenName: window.screenName }
-      WorldClockButton { screenName: window.screenName }
     }
   }
 }

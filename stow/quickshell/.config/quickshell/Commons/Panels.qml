@@ -9,7 +9,7 @@ Singleton {
   id: root
 
   // Panel ids in bar order, for the SUPER CTRL + number binds and for Tab inside a panel.
-  readonly property var order: ["bluetooth", "network", "audio", "monitor", "power", "clock", "worldclock"]
+  readonly property var order: ["bluetooth", "network", "audio", "monitor", "power", "clock"]
 
   property string current: ""
   property var anchor: null

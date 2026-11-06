@@ -17,14 +17,6 @@ Singleton {
     "yyyy-MM-dd HH:mm"
   ]
 
-  readonly property var worldClocks: [
-    { name: "Belgrade", zone: "Europe/Belgrade" },
-    { name: "Dubai", zone: "Asia/Dubai" },
-    { name: "Tokyo", zone: "Asia/Tokyo" },
-    { name: "Los Angeles", zone: "America/Los_Angeles" },
-    { name: "New York", zone: "America/New_York" }
-  ]
-
   // Seconds of inactivity before each step. 0 turns that step off.
   readonly property int idleScreensaver: 150
   readonly property int idleLock: 300

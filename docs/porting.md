@@ -12,7 +12,6 @@ Decisions and differences to carry into Step 3, the port of the Omarchy-based co
 - `hyprland-welcome` opens on first run under the generated config. The real config has to stop it.
 - `chromium-flags.conf` drops the host's `--load-extension` line, which points at Omarchy files.
 - The White theme is renamed Ultrawhite: `themes/ultrawhite`, `theme-set ultrawhite`.
-- The Share menu is built around LocalSend, which isn't on the package list. Decide when porting menus.
 - Brightness keys drive `brightnessctl` only. Omarchy also handled external monitors over DDC with
   `ddcutil`, and Apple displays. Your HDMI monitor's brightness keys won't work without adding that.
 - `screenshot` is much simpler than Omarchy's `omasnap`: click a window or drag a region. There's no
@@ -38,16 +37,25 @@ plugins. What that leaves out:
   or glass and clear backgrounds.
 - The tray has no pinning. Everything sits in the drawer behind the chevron. UNTESTED: nothing in the VM
   puts an icon in the tray.
-- The world clock is a list of your cities, with no globe, search or daylight strip. Edit them in
-  `Commons/Settings.qml`.
 - The network panel has no DNS provider picker, Wi-Fi QR code or speed test. "Connection settings" opens
   `nmtui` for anything else. UNTESTED for Wi-Fi: the VM only has a wired device.
 - The power panel shows the battery and power profile, without the system info section.
-- The lock screen has no fingerprint support and no clock. Wrong passwords lock you out for 2 minutes after
+- The lock screen has no fingerprint support. Wrong passwords lock you out for 2 minutes after
   10 tries.
 - The clipboard list shows images by their size, with no thumbnails. Emoji are a list, not a grid.
 - The menu has no Install or Remove section, and no font picker.
 - Notifications have no grouping, and don't focus the sending window when clicked unless the app asks.
-- The share menu appears empty unless LocalSend is installed.
 - Text shows as coloured fringes on VM screenshots. That's subpixel antialiasing in the VM's terminal fonts
   and needs checking on real hardware.
+
+## The look
+
+The colours and the font are still Vantablack, Ultrawhite and JetBrains Mono. The shapes are our own, to two rules:
+
+- Frames are 1 px hairlines at 30% of the text colour, and panels and toasts hang directly from the bar.
+- Whatever is selected is a solid inverted block: the focused workspace, the menu row, the panel row, today in
+  the calendar.
+
+So there's no logo, the bar only shows workspaces in use and labels its readouts in words, menus have no icons and
+sit high up with a fixed search line, sliders are hairlines with a tick, switches say on or off, toasts have a solid
+left edge and no countdown, the OSD is a strip under the bar, and the lock screen is the time above a line to type on.

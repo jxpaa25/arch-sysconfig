@@ -15,8 +15,7 @@ Overlay {
     bluetooth: "BluetoothPanel.qml",
     monitor: "MonitorPanel.qml",
     power: "PowerPanel.qml",
-    clock: "CalendarPanel.qml",
-    worldclock: "WorldClockPanel.qml"
+    clock: "CalendarPanel.qml"
   })
 
   shown: Panels.current !== ""
@@ -35,8 +34,8 @@ Overlay {
   Rectangle {
     id: card
 
-    x: Math.max(Style.edgeGap, Math.min(root.width - width - Style.edgeGap, root.anchorCenter - width / 2))
-    y: Style.spacing.xs
+    x: Math.max(0, Math.min(root.width - width, root.anchorCenter - width / 2))
+    y: 0
     width: loader.item ? loader.item.implicitWidth : 0
     height: Math.min(loader.item ? loader.item.implicitHeight : 0, root.height - Style.edgeGap * 2)
     color: Theme.popup.background

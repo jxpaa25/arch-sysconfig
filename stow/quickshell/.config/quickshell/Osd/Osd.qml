@@ -76,8 +76,8 @@ Scope {
     visible: root.shown
     color: "transparent"
     exclusionMode: ExclusionMode.Ignore
-    anchors.bottom: true
-    margins.bottom: Style.space(60)
+    anchors.top: true
+    margins.top: Saved.barHidden ? 0 : Style.bar.size
     implicitWidth: card.width
     implicitHeight: card.height
     mask: Region {}
@@ -88,36 +88,36 @@ Scope {
     Rectangle {
       id: card
 
-      width: contents.implicitWidth + Style.spacing.panel * 2
-      height: contents.implicitHeight + Style.spacing.panel * 2
+      width: contents.implicitWidth + Style.spacing.xl * 2
+      height: Style.space(32)
       color: Theme.popup.background
       border.color: Theme.popup.border
       border.width: Style.border
-      radius: Style.radius
 
       Row {
         id: contents
         anchors.centerIn: parent
-        spacing: Style.space(12)
+        spacing: Style.space(10)
 
         Text {
           anchors.verticalCenter: parent.verticalCenter
           text: root.glyph
           color: Theme.popup.text
           font.family: Style.font.family
-          font.pixelSize: Style.font.display
+          font.pixelSize: Style.font.icon
         }
 
         Rectangle {
           anchors.verticalCenter: parent.verticalCenter
           visible: root.progress >= 0
           width: Style.space(180)
-          height: Style.space(6)
-          color: Theme.withAlpha(Theme.popup.text, 0.15)
+          height: 1
+          color: Theme.withAlpha(Theme.popup.text, 0.3)
 
           Rectangle {
+            anchors.verticalCenter: parent.verticalCenter
             width: parent.width * Math.min(1, Math.max(0, root.progress))
-            height: parent.height
+            height: Style.space(3)
             color: Theme.popup.text
 
             Behavior on width {
@@ -135,8 +135,7 @@ Scope {
           textFormat: Text.PlainText
           color: Theme.popup.text
           font.family: Style.font.family
-          font.bold: true
-          font.pixelSize: Style.font.title
+          font.pixelSize: Style.font.small
         }
       }
     }

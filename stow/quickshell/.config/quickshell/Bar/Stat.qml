@@ -4,7 +4,7 @@ import Quickshell.Io
 import qs.Commons
 import qs.Ui
 
-// A dim readout fed by a small script. The script prints {"text": ..., "tooltip": ...},
+// A quiet readout fed by a small script. The script prints {"label": ..., "text": ..., "tooltip": ...},
 // or nothing at all to hide itself.
 BarButton {
   id: root
@@ -16,8 +16,8 @@ BarButton {
   visible: text !== ""
   width: visible ? implicitWidth : 0
   fontSize: 10
-  margin: Style.spaceReal(7.5)
-  labelOpacity: 0.4
+  margin: Style.spaceReal(6.5)
+  labelOpacity: 0.8
 
   Process {
     id: proc
@@ -31,6 +31,7 @@ BarButton {
         }
         try {
           var parsed = JSON.parse(raw)
+          root.note = parsed.label || ""
           root.text = parsed.text || ""
           root.tooltip = parsed.tooltip || ""
         } catch (e) {

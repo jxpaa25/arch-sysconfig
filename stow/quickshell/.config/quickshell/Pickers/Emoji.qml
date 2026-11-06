@@ -33,8 +33,7 @@ Scope {
       id: card
 
       anchors.horizontalCenter: parent.horizontalCenter
-      y: Math.max(Style.edgeGap, Math.round((overlay.height - height) / 2))
-      placeholder: "Emoji…"
+      placeholder: "Emoji"
       rows: {
         var words = filter.toLowerCase().split(/\s+/).filter(Boolean)
         var all = root.emojis

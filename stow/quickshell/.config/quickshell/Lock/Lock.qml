@@ -95,20 +95,60 @@ Scope {
         sourceSize.height: surface.height
       }
 
+      SystemClock {
+        id: clock
+        precision: SystemClock.Minutes
+      }
+
+      // Same colour as the plain background, so it only shows behind a wallpaper.
       Rectangle {
-        id: field
+        anchors.centerIn: parent
+        width: lockColumn.width + Style.space(56)
+        height: lockColumn.height + Style.space(56)
+        color: Theme.lock.background
+      }
+
+      Column {
+        id: lockColumn
 
         anchors.centerIn: parent
-        width: Style.space(381)
-        height: Style.space(67)
-        color: Theme.lock.background
-        border.width: Style.space(3)
-        border.color: root.failure ? Theme.lock.borderError : Theme.lock.borderActive
+        spacing: Style.space(4)
+
+        Text {
+          anchors.horizontalCenter: parent.horizontalCenter
+          text: Qt.formatDateTime(clock.date, "HH:mm")
+          color: Theme.lock.text
+          font.family: Style.font.family
+          font.pixelSize: Style.fontPx(5)
+          font.weight: Font.Light
+        }
+
+        Text {
+          anchors.horizontalCenter: parent.horizontalCenter
+          bottomPadding: Style.space(22)
+          text: Qt.formatDateTime(clock.date, "dddd d MMMM").toLowerCase()
+          color: Theme.lock.text
+          opacity: 0.45
+          font.family: Style.font.family
+          font.pixelSize: Style.font.body
+        }
+
+      Item {
+        id: field
+
+        width: Style.space(300)
+        height: Style.space(34)
+
+        Rectangle {
+          anchors { left: parent.left; right: parent.right; bottom: parent.bottom }
+          height: 1
+          color: root.failure ? Theme.lock.borderError : Theme.withAlpha(Theme.lock.text, input.text ? 1 : 0.3)
+        }
 
         TextInput {
           id: input
 
-          anchors { fill: parent; leftMargin: Style.space(16); rightMargin: Style.space(16) }
+          anchors.fill: parent
           verticalAlignment: TextInput.AlignVCenter
           horizontalAlignment: TextInput.AlignHCenter
           echoMode: TextInput.Password
@@ -120,7 +160,7 @@ Scope {
           color: root.failure ? Theme.lock.textError : Theme.lock.text
           selectionColor: Theme.lock.selection
           font.family: Style.font.family
-          font.pixelSize: Style.font.heading * 1.33
+          font.pixelSize: Style.font.title
           cursorVisible: !root.checking && !root.failure
 
           onTextEdited: {
@@ -159,13 +199,14 @@ Scope {
           verticalAlignment: Text.AlignVCenter
           horizontalAlignment: Text.AlignHCenter
           visible: !input.text
-          text: root.checking ? "Checking…" : (root.failure || "Enter password")
+          text: root.checking ? "checking" : (root.failure || "password")
           textFormat: Text.PlainText
           color: root.failure ? Theme.lock.textError : Theme.lock.placeholder
           font.family: Style.font.family
-          font.pixelSize: Style.font.heading
+          font.pixelSize: Style.font.body
           elide: Text.ElideRight
         }
+      }
       }
     }
   }

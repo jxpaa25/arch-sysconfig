@@ -10,7 +10,6 @@ Item {
   property string label: ""
   property string detail: ""
   property string trailing: ""
-  property bool trailingStrong: false
   property bool selected: false
   // -1 means this isn't a switch.
   property int toggled: -1
@@ -23,6 +22,8 @@ Item {
     return null
   }
   readonly property bool hasCursor: !!panel && panel.cursor === root
+  // The row with the keyboard cursor is a solid block, like the selection everywhere else.
+  readonly property color ink: hasCursor ? Theme.popup.background : Theme.popup.text
 
   signal clicked
   signal secondaryAction
@@ -37,10 +38,9 @@ Item {
 
   Rectangle {
     anchors.fill: parent
-    color: root.hasCursor || mouse.containsMouse && root.interactive ? Theme.control.hoverFill
-      : (root.selected ? Theme.control.selectedFill : "transparent")
-    border.color: root.hasCursor ? Theme.control.hoverBorder : "transparent"
-    border.width: 1
+    color: root.hasCursor ? Theme.popup.text
+      : (mouse.containsMouse && root.interactive ? Theme.control.hoverFill
+        : (root.selected ? Theme.control.selectedFill : "transparent"))
   }
 
   Text {
@@ -50,7 +50,7 @@ Item {
     horizontalAlignment: Text.AlignHCenter
     text: root.icon
     textFormat: Text.PlainText
-    color: Theme.popup.text
+    color: root.ink
     font.family: Style.font.family
     font.pixelSize: Style.font.icon
   }
@@ -63,9 +63,9 @@ Item {
       width: parent.width
       text: root.label
       textFormat: Text.PlainText
-      color: Theme.popup.text
+      color: root.ink
       font.family: Style.font.family
-      font.pixelSize: Style.font.title
+      font.pixelSize: Style.font.body
       elide: Text.ElideRight
     }
 
@@ -74,7 +74,7 @@ Item {
       visible: text !== ""
       text: root.detail
       textFormat: Text.PlainText
-      color: Theme.popup.text
+      color: root.ink
       opacity: 0.55
       font.family: Style.font.family
       font.pixelSize: Style.font.small
@@ -92,33 +92,21 @@ Item {
       visible: text !== ""
       text: root.trailing
       textFormat: Text.PlainText
-      color: Theme.popup.text
-      opacity: root.trailingStrong ? 1 : 0.6
+      color: root.ink
+      opacity: 0.6
       font.family: Style.font.family
-      font.pixelSize: root.trailingStrong ? Style.font.heading : Style.font.small
+      font.pixelSize: Style.font.small
     }
 
-    // The switch.
-    Rectangle {
+    // The switch, in words.
+    Text {
       anchors.verticalCenter: parent.verticalCenter
       visible: root.toggled >= 0
-      width: Style.space(30)
-      height: Style.space(16)
-      color: root.toggled === 1 ? Theme.popup.text : "transparent"
-      border.color: Theme.popup.text
-      border.width: 1
-
-      Rectangle {
-        anchors.verticalCenter: parent.verticalCenter
-        x: root.toggled === 1 ? parent.width - width - Style.space(3) : Style.space(3)
-        width: Style.space(10)
-        height: width
-        color: root.toggled === 1 ? Theme.popup.background : Theme.popup.text
-
-        Behavior on x {
-          NumberAnimation { duration: Style.fast; easing.type: Easing.OutCubic }
-        }
-      }
+      text: root.toggled === 1 ? "on" : "off"
+      color: root.ink
+      opacity: root.toggled === 1 ? 1 : 0.45
+      font.family: Style.font.family
+      font.pixelSize: Style.font.small
     }
   }
 

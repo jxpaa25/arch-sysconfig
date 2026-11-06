@@ -59,9 +59,8 @@ Scope {
       id: card
 
       anchors.horizontalCenter: parent.horizontalCenter
-      y: Math.max(Style.edgeGap, Math.round((overlay.height - height) / 2))
       cardWidth: Style.space(640)
-      placeholder: "Clipboard…"
+      placeholder: "Clipboard"
       rows: {
         var query = filter.toLowerCase()
         var all = root.entries

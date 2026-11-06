@@ -14,7 +14,7 @@ Singleton {
   function fontPx(multiple) { return Math.max(1, Math.round(Settings.fontBaseSize * multiple)) }
 
   readonly property int radius: 0
-  readonly property int border: 2
+  readonly property int border: 1
   readonly property int edgeGap: 5
 
   // Short enough to feel instant. Shared so every surface moves at the same pace.

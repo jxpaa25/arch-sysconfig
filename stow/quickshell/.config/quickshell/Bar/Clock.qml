@@ -8,7 +8,6 @@ PanelButton {
   id: root
 
   panelId: "clock"
-  bold: true
   margin: Style.spaceReal(8.75)
   fontSize: Style.font.body
 

@@ -87,9 +87,10 @@ Item {
       text: root.title
       textFormat: Text.PlainText
       color: Theme.popup.text
+      opacity: 0.6
       font.family: Style.font.family
-      font.pixelSize: Style.font.heading
-      font.weight: Font.Medium
+      font.pixelSize: Style.font.body
+      font.capitalization: Font.AllLowercase
       elide: Text.ElideRight
     }
 
@@ -99,9 +100,10 @@ Item {
       text: root.subtitle
       textFormat: Text.PlainText
       color: Theme.popup.text
-      opacity: 0.55
+      opacity: 0.4
       font.family: Style.font.family
       font.pixelSize: Style.font.small
+      font.capitalization: Font.AllLowercase
       elide: Text.ElideRight
     }
   }

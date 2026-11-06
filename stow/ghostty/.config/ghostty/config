@@ -8,10 +8,11 @@ font-size = 10
 
 # Window
 window-theme = ghostty
-window-padding-x = 14
-window-padding-y = 14
+window-padding-x = 10
+window-padding-y = 8
 confirm-close-surface=false
 resize-overlay = never
+app-notifications = no-clipboard-copy,no-config-reload
 gtk-toolbar-style = flat
 
 # Cursor styling

@@ -200,7 +200,6 @@ Scope {
         var names = lines.slice(0, -1)
         Data.menus.theme.rows = names.map(function(name) {
           return {
-            icon: "\u{F0E0C}",
             label: name.charAt(0).toUpperCase() + name.slice(1),
             action: "theme-set " + name,
             checked: "[[ $(basename \"$(readlink ~/.local/state/theme/current)\") == " + name + " ]]"
@@ -220,10 +219,9 @@ Scope {
     ListCard {
       id: card
       anchors.horizontalCenter: parent.horizontalCenter
-      y: Math.max(Style.edgeGap, Math.round((overlay.height - height) / 2))
       rows: root.visibleRows
       canGoBack: root.stack.length > 0
-      placeholder: root.pick ? root.pick.prompt + "…" : (root.menuId === "apps" ? "Apps…" : Data.menus[root.menuId].title + "…")
+      placeholder: root.pick ? root.pick.prompt : (root.menuId === "apps" ? "Apps" : Data.menus[root.menuId].title)
       onActivated: function(row) { root.activate(row) }
       onBack: root.goBack()
       onCancelled: root.close()

@@ -106,7 +106,6 @@ Singleton {
     readonly property color background: root.composed("notifications.background", "notifications.background-alpha", root.background, 1)
     readonly property color text: root.pick("notifications.text", root.foreground)
     readonly property color border: root.composed("notifications.border", "notifications.border-alpha", root.accent, 1)
-    readonly property color countdown: root.pick("notifications.countdown", root.accent)
   }
 
   readonly property QtObject menu: QtObject {
@@ -114,9 +113,9 @@ Singleton {
     readonly property color text: root.pick("menu.text", root.foreground)
     readonly property color border: root.composed("menu.border", "menu.border-alpha", root.foreground, 1)
     readonly property color scrim: root.composed("menu.scrim", "menu.scrim-alpha", root.background, 0.5)
-    readonly property color selectedBackground: root.composed("menu.selected-background", "menu.selected-background-alpha", root.foreground, 0.08)
-    readonly property color selectedText: root.pick("menu.selected-text", root.accent)
-    readonly property color selectedBorder: root.composed("menu.selected-border", "menu.selected-border-alpha", root.foreground, 0.25)
+    readonly property color selectedBackground: root.composed("menu.selected-background", "menu.selected-background-alpha", root.foreground, 1)
+    readonly property color selectedText: root.pick("menu.selected-text", root.background)
+    readonly property color selectedBorder: root.composed("menu.selected-border", "menu.selected-border-alpha", root.foreground, 0)
   }
 
   readonly property QtObject polkit: QtObject {
@@ -124,7 +123,7 @@ Singleton {
     readonly property color text: root.pick("polkit.text", root.foreground)
     readonly property color textError: root.pick("polkit.text-error", root.urgent)
     readonly property color border: root.composed("polkit.border", "polkit.border-alpha", root.accent, 1)
-    readonly property color borderError: root.composed("polkit.border-error", "polkit.border-alpha", root.urgent, 1)
+    readonly property color borderError: root.pick("polkit.border-error", root.urgent)
     readonly property color accent: root.pick("polkit.accent", root.accent)
     readonly property color scrim: root.composed("polkit.scrim", "polkit.scrim-alpha", root.background, 0.5)
   }
@@ -136,7 +135,7 @@ Singleton {
     readonly property color textError: root.pick("lock.text-error", root.urgent)
     readonly property color border: root.composed("lock.border", "lock.border-alpha", root.accent, 1)
     readonly property color borderActive: root.composed("lock.border-active", "lock.border-alpha", root.accent, 1)
-    readonly property color borderError: root.composed("lock.border-error", "lock.border-alpha", root.urgent, 1)
+    readonly property color borderError: root.pick("lock.border-error", root.urgent)
     readonly property color selection: root.composed("lock.selection", "lock.selection-alpha", root.accent, 0.45)
   }
 

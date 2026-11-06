@@ -81,7 +81,7 @@ Scope {
     color: "transparent"
     exclusionMode: ExclusionMode.Normal
     anchors { top: true; right: true }
-    margins { top: Style.edgeGap; right: Style.edgeGap }
+    margins { top: 0; right: 0 }
     implicitWidth: Style.space(380)
     implicitHeight: Math.max(1, stack.implicitHeight)
     WlrLayershell.namespace: "desk-notifications"
@@ -123,8 +123,7 @@ Scope {
       id: card
 
       anchors.horizontalCenter: parent.horizontalCenter
-      y: Math.max(Style.edgeGap, Math.round((overlay.height - height) / 2))
-      placeholder: (root.cardMode === "history" ? "History" : "Notifications") + "…"
+      placeholder: root.cardMode === "history" ? "History" : "Notifications"
       rows: {
         var query = filter.toLowerCase()
         var source = root.history

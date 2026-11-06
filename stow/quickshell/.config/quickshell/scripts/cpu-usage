@@ -2,13 +2,11 @@
 # CPU usage %, measured as a delta over a short sample window.
 set -euo pipefail
 
-icon="󰻠"
-
 line1=$(grep '^cpu ' /proc/stat)
 sleep 0.4
 line2=$(grep '^cpu ' /proc/stat)
 
-awk -v l1="$line1" -v l2="$line2" -v icon="$icon" '
+awk -v l1="$line1" -v l2="$line2" '
 BEGIN {
   n1 = split(l1, f1, " ")
   n2 = split(l2, f2, " ")
@@ -24,5 +22,5 @@ BEGIN {
   di = idle2 - idle1
   pct = (dt > 0) ? (100 * (dt - di) / dt) : 0
 
-  printf "{\"text\":\"%s %.0f%%\",\"tooltip\":\"CPU usage: %.1f%%\"}\n", icon, pct, pct
+  printf "{\"label\":\"cpu\",\"text\":\"%.0f%%\",\"tooltip\":\"CPU usage: %.1f%%\"}\n", pct, pct
 }'

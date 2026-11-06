@@ -11,4 +11,5 @@ Text {
   opacity: 0.55
   font.family: Style.font.family
   font.pixelSize: Style.font.small
+  font.capitalization: Font.AllLowercase
 }

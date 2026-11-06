@@ -31,7 +31,6 @@ Rectangle {
   color: Theme.notification.background
   border.color: critical ? Theme.urgent : Theme.notification.border
   border.width: Style.border
-  radius: Style.radius
 
   Timer {
     interval: 100
@@ -58,7 +57,7 @@ Rectangle {
   Row {
     id: content
     anchors { left: parent.left; right: parent.right; top: parent.top }
-    anchors { leftMargin: Style.space(12); rightMargin: Style.space(12); topMargin: Style.space(10) }
+    anchors { leftMargin: Style.space(14); rightMargin: Style.space(12); topMargin: Style.space(10) }
     spacing: Style.space(10)
 
     Image {
@@ -84,7 +83,6 @@ Rectangle {
         color: Theme.notification.text
         font.family: Style.font.family
         font.pixelSize: Style.font.title
-        font.weight: Font.Medium
         elide: Text.ElideRight
       }
 
@@ -142,12 +140,10 @@ Rectangle {
     }
   }
 
-  // Time left, along the bottom edge.
+  // A solid edge says which way it came from, and takes the urgent colour when it matters.
   Rectangle {
-    visible: root.duration > 0
-    anchors { left: parent.left; bottom: parent.bottom; margins: Style.border }
-    height: Math.max(1, Style.space(2))
-    width: Math.max(0, parent.width - Style.border * 2) * Math.max(0, root.remaining / Math.max(1, root.duration))
-    color: Theme.notification.countdown
+    anchors { left: parent.left; top: parent.top; bottom: parent.bottom }
+    width: Style.space(3)
+    color: root.critical ? Theme.urgent : Theme.notification.text
   }
 }

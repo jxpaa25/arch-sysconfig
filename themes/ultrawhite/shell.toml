@@ -127,8 +127,8 @@ base-size = 12
 background       = "#ffffff"
 background-alpha = 1.0
 text             = "#000000"
-border           = "hyprland.active-border"
-border-alpha     = 1.0
+border           = "foreground"
+border-alpha     = 0.3
 # border-width     = 2
 
 [tooltip]
@@ -137,8 +137,8 @@ border-alpha     = 1.0
 background       = "#ffffff"
 background-alpha = 0.97
 text             = "#000000"
-border           = "hyprland.active-border-foreground"
-border-alpha     = 1.0
+border           = "foreground"
+border-alpha     = 0.3
 
 [notifications]
 background       = "#ffffff"
@@ -146,8 +146,8 @@ background-alpha = 1.0
 text             = "#000000"
 # Conventionally matches the Hyprland active-window border. Border accepts
 # either a solid color or the full active-border gradient.
-border           = "hyprland.active-border"
-border-alpha     = 1.0
+border           = "foreground"
+border-alpha     = 0.3
 # border-width     = 2
 countdown        = "#6e6e6e"
 
@@ -159,15 +159,15 @@ countdown        = "#6e6e6e"
 background                = "#ffffff"
 background-alpha          = 0.95
 text                      = "#000000"
-border                    = "hyprland.active-border-foreground"
-border-alpha              = 1.0
+border                    = "foreground"
+border-alpha              = 0.3
 scrim                     = "#ffffff"
 scrim-alpha               = 0.5
-selected-background       = "#000000"
-selected-background-alpha = 0.08
-selected-text             = "#6e6e6e"
+selected-background       = "foreground"
+selected-background-alpha = 1.0
+selected-text             = "background"
 selected-border           = "hyprland.active-border-foreground"
-selected-border-alpha     = 0.25
+selected-border-alpha     = 0.0
 
 [menu]
 # Cards, rows, and selected-row treatment. Alpha companions (where present)
@@ -176,15 +176,15 @@ selected-border-alpha     = 0.25
 background                = "#ffffff"
 background-alpha          = 1.0
 text                      = "#000000"
-border                    = "hyprland.active-border-foreground"
-border-alpha              = 1.0
+border                    = "foreground"
+border-alpha              = 0.3
 scrim                     = "#ffffff"
 scrim-alpha               = 0.5
-selected-background       = "#000000"
-selected-background-alpha = 0.08
-selected-text             = "#6e6e6e"
+selected-background       = "foreground"
+selected-background-alpha = 1.0
+selected-text             = "background"
 selected-border           = "hyprland.active-border-foreground"
-selected-border-alpha     = 0.25
+selected-border-alpha     = 0.0
 
 [polkit]
 # Polkit authentication prompt (sudo/password dialogs). scrim is the
@@ -196,9 +196,9 @@ background       = "#ffffff"
 background-alpha = 1.0
 text             = "#000000"
 text-error       = "#2a2a2a"
-border           = "hyprland.active-border"
+border           = "foreground"
 border-error     = "#2a2a2a"
-border-alpha     = 1.0
+border-alpha     = 0.3
 scrim            = "#ffffff"
 scrim-alpha      = 0.5
 # accent is the lock-icon glyph color + text-selection tint.

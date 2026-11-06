@@ -32,9 +32,7 @@ Item {
 
   Rectangle {
     anchors.fill: parent
-    color: root.hasCursor ? Theme.control.hoverFill : "transparent"
-    border.color: root.hasCursor ? Theme.control.hoverBorder : "transparent"
-    border.width: 1
+    color: root.hasCursor ? Theme.control.selectedFill : "transparent"
   }
 
   Text {
@@ -86,17 +84,28 @@ Item {
     height: Style.space(20)
     anchors.bottomMargin: Style.space(4)
 
+    // A hairline with a tick at the value.
     Rectangle {
       anchors { left: parent.left; right: parent.right; verticalCenter: parent.verticalCenter }
-      height: Style.space(5)
-      color: Theme.withAlpha(Theme.popup.text, 0.15)
+      height: 1
+      color: Theme.withAlpha(Theme.popup.text, 0.3)
+    }
 
-      Rectangle {
-        width: parent.width * Math.max(0, Math.min(1, root.value))
-        height: parent.height
-        color: Theme.popup.text
-        opacity: root.dimmed ? 0.4 : 1
-      }
+    Rectangle {
+      anchors { left: parent.left; verticalCenter: parent.verticalCenter }
+      width: parent.width * Math.max(0, Math.min(1, root.value))
+      height: 1
+      color: Theme.popup.text
+      opacity: root.dimmed ? 0.4 : 1
+    }
+
+    Rectangle {
+      anchors.verticalCenter: parent.verticalCenter
+      x: (parent.width - width) * Math.max(0, Math.min(1, root.value))
+      width: Style.space(3)
+      height: Style.space(11)
+      color: Theme.popup.text
+      opacity: root.dimmed ? 0.4 : 1
     }
 
     MouseArea {

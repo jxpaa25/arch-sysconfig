@@ -5,10 +5,11 @@ import qs.Ui
 
 // Workspace slots 1-10. With paired monitors (see hypr/bindings/slots.lua), slot N means
 // workspace N together with workspace N+10, so a slot counts as occupied if either one is.
+// Only the slots in use show: the focused one as a solid block, the rest as plain numbers.
 Row {
   id: root
 
-  spacing: Style.space(1)
+  spacing: 0
   rightPadding: Style.spaceReal(1.5)
 
   function slotOf(id) {
@@ -32,8 +33,9 @@ Row {
       readonly property int slot: index + 1
       readonly property bool focused: Hyprland.focusedWorkspace !== null && root.slotOf(Hyprland.focusedWorkspace.id) === slot
 
-      text: focused ? String.fromCodePoint(0xF14FB) : (slot === 10 ? "0" : String(slot))
-      labelOpacity: focused || root.slotOccupied(slot) ? 1 : 0.5
+      visible: focused || root.slotOccupied(slot)
+      text: slot === 10 ? "0" : String(slot)
+      inverted: focused
       fixedWidth: Style.space(20)
 
       // Same as SUPER + number: moves every paired monitor, and focus stays put.

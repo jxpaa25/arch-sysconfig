@@ -3,8 +3,6 @@
 # and machines without a "Package id" sensor.
 set -uo pipefail
 
-icon="󰔏"
-
 raw=$(sensors 2>/dev/null | awk '/^Package id 0:/ {gsub(/[+°C]/, "", $4); print $4; exit}')
 
 if [ -z "$raw" ]; then
@@ -24,7 +22,7 @@ if [ -z "$raw" ]; then
 fi
 
 if [ -z "$raw" ]; then
-  printf '{"text":"%s --°C","tooltip":"CPU temperature unavailable"}\n' "$icon"
+  printf '{"label":"temp","text":"--","tooltip":"CPU temperature unavailable"}\n'
 else
-  printf '{"text":"%s %.0f°C","tooltip":"CPU temperature: %s°C"}\n' "$icon" "$raw" "$raw"
+  printf '{"label":"temp","text":"%.0f°","tooltip":"CPU temperature: %s°C"}\n' "$raw" "$raw"
 fi

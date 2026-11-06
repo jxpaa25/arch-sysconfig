@@ -8,17 +8,17 @@ FocusScope {
   id: root
 
   property var rows: []
-  property string placeholder: "Search…"
-  property int cardWidth: Style.space(500)
+  property string placeholder: "Search"
+  property int cardWidth: Style.space(540)
   property int maxRows: 12
   property bool canGoBack: false
   readonly property alias filter: input.text
 
   property int selected: 0
-  readonly property int rowHeight: Style.space(38)
-  readonly property int detailRowHeight: Style.space(50)
+  readonly property int rowHeight: Style.space(30)
+  readonly property int detailRowHeight: Style.space(46)
   readonly property int padding: Style.spacing.panel
-  readonly property int headerHeight: Math.max(Style.space(34), Style.font.title + Style.spacing.md * 2)
+  readonly property int headerHeight: Style.space(44)
   readonly property int listHeight: Math.min(list.contentHeight, maxRows * rowHeight)
 
   signal activated(var row)
@@ -26,8 +26,13 @@ FocusScope {
   signal back
   signal cancelled
 
+  // Every row keeps the icon column if any of them uses it, so labels line up.
+  readonly property bool anyIcon: rows.some(function(row) { return !!row.icon || !!row.image })
+
   width: cardWidth
-  height: padding * 2 + headerHeight + Style.spacing.sm + (rows.length ? listHeight : Style.space(80))
+  height: headerHeight + Style.spacing.md * 2 + (rows.length ? listHeight : Style.space(60))
+  // Held high up rather than centred, so the search box stays put while the list changes.
+  y: parent ? Math.max(Style.edgeGap, Math.min(Math.round(parent.height * 0.18), parent.height - height - Style.edgeGap)) : 0
 
   function reset() {
     input.text = ""
@@ -58,19 +63,34 @@ FocusScope {
     color: Theme.menu.background
     border.color: Theme.menu.border
     border.width: Style.border
-    radius: Style.radius
+  }
+
+  Text {
+    id: promptMark
+    anchors { left: parent.left; leftMargin: root.padding; verticalCenter: input.verticalCenter }
+    text: "›"
+    color: Theme.menu.text
+    opacity: 0.45
+    font.family: Style.font.family
+    font.pixelSize: Style.font.heading
+  }
+
+  Rectangle {
+    anchors { left: parent.left; right: parent.right; top: input.bottom; leftMargin: Style.border; rightMargin: Style.border }
+    height: 1
+    color: Theme.withAlpha(Theme.menu.text, 0.15)
   }
 
   TextInput {
     id: input
-    anchors { left: parent.left; right: parent.right; top: parent.top; margins: root.padding }
+    anchors { left: promptMark.right; right: parent.right; top: parent.top; leftMargin: Style.spacing.lg; rightMargin: root.padding }
     height: root.headerHeight
     verticalAlignment: TextInput.AlignVCenter
     color: Theme.menu.text
     selectionColor: Theme.withAlpha(Theme.menu.text, 0.35)
     selectedTextColor: Theme.menu.text
     font.family: Style.font.family
-    font.pixelSize: Style.font.heading
+    font.pixelSize: Style.font.title
     clip: true
     focus: true
 
@@ -129,7 +149,7 @@ FocusScope {
       visible: !input.text
       text: root.placeholder
       color: Theme.menu.text
-      opacity: 0.58
+      opacity: 0.45
       font: input.font
       elide: Text.ElideRight
     }
@@ -137,7 +157,7 @@ FocusScope {
 
   ListView {
     id: list
-    anchors { left: parent.left; right: parent.right; top: input.bottom; margins: root.padding; topMargin: Style.spacing.sm }
+    anchors { left: parent.left; right: parent.right; top: input.bottom; leftMargin: Style.border; rightMargin: Style.border; topMargin: Style.spacing.md }
     height: root.listHeight
     clip: true
     model: root.rows
@@ -161,19 +181,18 @@ FocusScope {
         color: row.current ? Theme.menu.selectedBackground : "transparent"
         border.color: row.current ? Theme.menu.selectedBorder : "transparent"
         border.width: 1
-        radius: Style.radius
       }
 
       Text {
         id: iconText
         anchors { left: parent.left; verticalCenter: parent.verticalCenter }
-        width: row.modelData.icon || row.modelData.image ? Style.space(44) : Style.space(12)
+        width: root.anyIcon ? Style.space(44) : root.padding
         horizontalAlignment: Text.AlignHCenter
         text: row.modelData.icon || ""
         textFormat: Text.PlainText
         color: row.textColor
         font.family: Style.font.family
-        font.pixelSize: Style.font.iconLarge
+        font.pixelSize: Style.font.icon
       }
 
       Image {
@@ -198,8 +217,7 @@ FocusScope {
           textFormat: Text.PlainText
           color: row.textColor
           font.family: Style.font.family
-          font.pixelSize: Style.font.heading
-          font.weight: Font.Medium
+          font.pixelSize: Style.font.title
           elide: Text.ElideRight
         }
 
@@ -208,8 +226,8 @@ FocusScope {
           visible: !!row.modelData.detail
           text: row.modelData.detail || ""
           textFormat: Text.PlainText
-          color: Theme.menu.text
-          opacity: 0.52
+          color: row.textColor
+          opacity: 0.55
           font.family: Style.font.family
           font.pixelSize: Style.font.small
           elide: Text.ElideRight
@@ -218,7 +236,7 @@ FocusScope {
 
       Row {
         id: trail
-        anchors { right: parent.right; verticalCenter: parent.verticalCenter; rightMargin: Style.spacing.lg }
+        anchors { right: parent.right; verticalCenter: parent.verticalCenter; rightMargin: root.padding }
         spacing: Style.spacing.md
 
         Text {
@@ -226,8 +244,8 @@ FocusScope {
           visible: !!row.modelData.hint
           text: row.modelData.hint || ""
           textFormat: Text.PlainText
-          color: Theme.menu.text
-          opacity: 0.52
+          color: row.textColor
+          opacity: 0.55
           font.family: Style.font.family
           font.pixelSize: Style.font.small
         }
@@ -237,9 +255,9 @@ FocusScope {
           visible: !!row.modelData.checked || !!row.modelData.more
           text: row.modelData.checked ? "✓" : "›"
           color: row.textColor
-          opacity: row.modelData.checked ? 1 : 0.36
+          opacity: row.modelData.checked ? 1 : 0.45
           font.family: Style.font.family
-          font.pixelSize: Style.font.heading
+          font.pixelSize: Style.font.title
         }
       }
 
@@ -261,8 +279,8 @@ FocusScope {
     horizontalAlignment: Text.AlignHCenter
     text: "Nothing found"
     color: Theme.menu.text
-    opacity: 0.7
+    opacity: 0.45
     font.family: Style.font.family
-    font.pixelSize: Style.font.title
+    font.pixelSize: Style.font.body
   }
 }

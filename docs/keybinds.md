@@ -95,7 +95,7 @@ Totals: 127 keep, 70 port, 44 drop. Lid-switch handling has no label so it isn't
 | `SUPER CTRL + O` | Toggle menu | port |  |
 | `SUPER CTRL + H` | Hardware menu | port | Your choice |
 | `SUPER CTRL + C` | Capture menu | port | Screenshot, recording, OCR |
-| `SUPER CTRL + S` | Share menu | port | Your choice. Depends on LocalSend, see porting notes |
+| `SUPER CTRL + S` | Share menu | drop | Your choice. LocalSend not wanted |
 | `SUPER CTRL + V` | Clipboard manager | port |  |
 | `SUPER CTRL + E` | Emojis | port |  |
 | `SUPER CTRL + SPACE` / `SUPER CTRL + W` / `SUPER ALT + W` | Wallpaper picker | port | Includes your non-Space fallback |
@@ -111,7 +111,8 @@ Totals: 127 keep, 70 port, 44 drop. Lid-switch handling has no label so it isn't
 |---|---|---|---|
 | `SUPER CTRL + A` / `SUPER CTRL + B` / `SUPER CTRL + N` | Audio / Bluetooth / Network | port |  |
 | `SUPER CTRL + D` / `SUPER CTRL + P` | Display / Power | port |  |
-| `SUPER CTRL ALT + D` / `SUPER CTRL ALT + E` | Calendar / World clock | port |  |
+| `SUPER CTRL ALT + D` | Calendar | port |  |
+| `SUPER CTRL ALT + E` | World clock | drop | Your choice |
 | `SUPER CTRL + 1-9` | Open bar panel by position | port |  |
 
 ## Notifications (Quickshell)
