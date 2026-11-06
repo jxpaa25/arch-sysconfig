@@ -1,0 +1,7 @@
+# Needed by the installer itself and by everything after it.
+base-devel
+git
+stow
+rsync
+polkit
+zram-generator

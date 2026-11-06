@@ -105,7 +105,8 @@ efibootmgr --create --disk /dev/vda --part 1 --label 'Arch Linux (Limine)' --loa
 ```
 
 `/boot/limine.conf` (put your own value from `cryptsetup luksUUID /dev/vda2`). Limine finds it at the
-ESP root from either EFI path:
+ESP root from either EFI path. This entry only has to get you to `install.sh`, whose `35-snapshots`
+module replaces it with generated entries:
 
 ```
 timeout: 3
@@ -117,7 +118,8 @@ timeout: 3
     module_path: boot():/initramfs-linux.img
 ```
 
-`/etc/pacman.d/hooks/99-limine.hook`, which keeps both EFI binaries current:
+`/etc/pacman.d/hooks/99-limine.hook`, which keeps both EFI binaries current until `install.sh` replaces
+it with the one from `limine-mkinitcpio-hook`:
 
 ```ini
 [Trigger]
@@ -172,8 +174,9 @@ virsh -c qemu:///session start arch-vm
 Unlock LUKS in the console (`virt-viewer --attach -c qemu:///session arch-vm`), or run `dev/vm-unlock.sh`, which
 sends the passphrase as keystrokes.
 
-`virsh screenshot` doesn't work while SPICE OpenGL is on (`screendump: no surface`). Use a viewer to see
-the console.
+`virsh screenshot` works during the firmware and Limine menu stage, then fails with
+`screendump: no surface` once the kernel takes over the display. Use a viewer to see the console after
+that.
 
 ## 6. Snapshot
 
@@ -181,7 +184,7 @@ Offline, so it's consistent and doesn't depend on UEFI snapshot support. The NVR
 which is why Limine is also on the removable path.
 
 ```bash
-virsh -c qemu:///session shutdown arch-vm
+virsh -c qemu:///session shutdown arch-vm                  # after install.sh, use dev/vm-stop.sh
 qemu-img snapshot -c 00-base ~/VMs/images/arch-vm.qcow2   # once it's off
 qemu-img snapshot -l ~/VMs/images/arch-vm.qcow2           # list
 qemu-img snapshot -a 00-base ~/VMs/images/arch-vm.qcow2   # restore
@@ -194,6 +197,9 @@ qemu-img snapshot -a 00-base ~/VMs/images/arch-vm.qcow2   # restore
 - Add `linux-firmware` and your CPU's `intel-ucode` or `amd-ucode` to `pacstrap`. The `microcode` hook
   picks it up. `install.sh` also adds these when it detects real hardware.
 - Set your own hostname and username. `install.sh` doesn't depend on either.
+- Consider a 4 GiB ESP, which `limine-snapper-sync` recommends. 2 GiB works here (75-110 MB in use on
+  the VM), but NVIDIA and DKMS modules can add over 300 MiB per kernel version. An ESP over 85% full stops
+  new snapshot entries.
 - Wi-Fi during install: use `iwctl` on the live ISO.
 - Dual-booting: never run `sgdisk --zap-all`. Create partitions
   in free space and reuse the existing ESP, checking first that it has room for the kernel and initramfs.

@@ -1,0 +1,3 @@
+# Real hardware only.
+linux-firmware
+sof-firmware

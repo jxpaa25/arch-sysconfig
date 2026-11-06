@@ -1,0 +1,2 @@
+vulkan-intel
+intel-media-driver

@@ -1,0 +1,3 @@
+# Keep USB devices awake. Fixes flaky mice and keyboards, at a small battery cost.
+# A modprobe.d option wouldn't work here: usbcore is built into the Arch kernel.
+ACTION=="add", SUBSYSTEM=="usb", TEST=="power/control", ATTR{power/control}="on"

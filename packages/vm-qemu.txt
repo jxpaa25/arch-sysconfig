@@ -1,0 +1,4 @@
+# QEMU/KVM guests only: clean shutdown from the host.
+# spice-vdagent is left out on purpose. It pulls in 70 packages (gtk3, avahi, cairo...),
+# which would hide missing dependencies that then only fail on real hardware.
+qemu-guest-agent

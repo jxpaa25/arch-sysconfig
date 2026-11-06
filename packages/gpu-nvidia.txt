@@ -1,0 +1,6 @@
+# UNTESTED until it runs on real hardware; the VM has no NVIDIA GPU.
+# nvidia-open supports Turing (GTX 16xx / RTX 20xx) and newer only.
+linux-headers
+nvidia-open-dkms
+nvidia-utils
+libva-nvidia-driver
