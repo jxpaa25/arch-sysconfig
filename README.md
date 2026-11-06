@@ -90,7 +90,6 @@ themes/           colours for every app
 templates/        files apps rewrite at runtime, so they get a copy
 system/           files installed under /etc
 tests/verify.sh   checks a finished install
-dev/              helpers for the test VM, never used by install.sh
 docs/             the base install, keybindings and porting notes
 ```
 

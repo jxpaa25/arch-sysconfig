@@ -44,7 +44,7 @@ Notes:
 - `gl.rendernode` must be the Intel GPU on a hybrid laptop. Find it with `ls -l /dev/dri/by-path/`; the
   number can differ between machines.
 - `--cloud-init` loads the SSH key into the live ISO, so no root password is needed there.
-- Reach the live ISO with `dev/vm-ssh.sh --live`. Everything in steps 2-4 runs there, as root.
+- Reach the live ISO over SSH on the forwarded port. Everything in steps 2-4 runs there, as root.
 
 ## 2. Disk
 
@@ -171,8 +171,7 @@ virsh -c qemu:///session detach-disk arch-vm sdb --config
 virsh -c qemu:///session start arch-vm
 ```
 
-Unlock LUKS in the console (`virt-viewer --attach -c qemu:///session arch-vm`), or run `dev/vm-unlock.sh`, which
-sends the passphrase as keystrokes.
+Unlock LUKS in the console (`virt-viewer --attach -c qemu:///session arch-vm`).
 
 `virsh screenshot` works during the firmware and Limine menu stage, then fails with
 `screendump: no surface` once the kernel takes over the display. Use a viewer to see the console after
@@ -184,7 +183,7 @@ Offline, so it's consistent and doesn't depend on UEFI snapshot support. The NVR
 which is why Limine is also on the removable path.
 
 ```bash
-virsh -c qemu:///session shutdown arch-vm                  # after install.sh, use dev/vm-stop.sh
+virsh -c qemu:///session shutdown arch-vm
 qemu-img snapshot -c 00-base ~/VMs/images/arch-vm.qcow2   # once it's off
 qemu-img snapshot -l ~/VMs/images/arch-vm.qcow2           # list
 qemu-img snapshot -a 00-base ~/VMs/images/arch-vm.qcow2   # restore
