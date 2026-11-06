@@ -42,8 +42,8 @@ which starts the desktop. Then check the result from a terminal:
 tests/verify.sh
 ```
 
-Allow an hour or so. Most of that is downloads and AUR builds: `limine-snapper-sync` alone pulls in a 330 MB
-JDK to build with, and removes it afterwards.
+Allow 25 to 70 minutes, depending on your connection. Most of that is downloads and AUR builds:
+`limine-snapper-sync` alone pulls in a 330 MB JDK to build with, and removes it afterwards.
 
 Keep the clone where it is, because your dotfiles are links into it.
 
