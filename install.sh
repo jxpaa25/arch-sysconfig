@@ -10,7 +10,7 @@ set -euo pipefail
 # shellcheck source=install/lib.sh
 source "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/install/lib.sh"
 
-MODULES=(10-base 20-drivers 30-aur 35-snapshots)
+MODULES=(10-base 20-drivers 30-aur 35-snapshots 40-packages 50-dotfiles 60-services 70-post)
 
 usage() {
   sed -n '2,7s/^# \{0,1\}//p' "${BASH_SOURCE[0]}"

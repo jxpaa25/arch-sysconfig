@@ -30,13 +30,11 @@ fi
 
 install_pkgs snapshots
 
-# The GraalVM and Gradle builds leave about 700 MB behind. Remove it, without touching
-# a ~/.gradle that was already there before this build.
+# Gradle leaves a ~/.gradle behind. Remove it, unless it was there before this build.
 [[ -e $HOME/.gradle ]] && had_gradle=1 || had_gradle=0
 # No Gradle daemon: it would outlive the build, keep writing to ~/.gradle, and keep
 # holding memory for hours after yay has uninstalled its JDK.
 GRADLE_OPTS="-Dorg.gradle.daemon=false" install_aur aur-snapshots
-rm -rf "$HOME"/.cache/yay/limine-mkinitcpio-hook "$HOME"/.cache/yay/limine-snapper-sync
 if ((!had_gradle)); then
   pkill -u "$USER" -f GradleDaemon || true
   rm -rf "$HOME/.gradle"

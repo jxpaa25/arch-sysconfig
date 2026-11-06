@@ -1,0 +1,36 @@
+# Compositor and session
+hyprland
+uwsm
+xdg-desktop-portal-hyprland
+xdg-desktop-portal-gtk
+hyprland-guiutils
+hyprpicker
+hyprsunset
+wl-clipboard
+gnome-keyring
+xdg-user-dirs
+xdg-utils
+
+# Bar and shell
+quickshell
+
+# Audio. pipewire-jack is listed so the solver doesn't pick jack2 instead.
+pipewire
+wireplumber
+pipewire-pulse
+pipewire-alsa
+pipewire-jack
+gst-plugin-pipewire
+
+# Network
+networkmanager
+
+# Browsers (Zen, the default, comes from the AUR)
+firefox
+chromium
+
+# Fonts
+ttf-jetbrains-mono-nerd
+noto-fonts
+noto-fonts-cjk
+noto-fonts-emoji

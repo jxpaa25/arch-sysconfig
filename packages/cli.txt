@@ -1,0 +1,36 @@
+# Shell and terminal
+zsh
+ghostty
+xdg-terminal-exec
+tmux
+
+# Editors. tree-sitter-cli is needed by LazyVim's treesitter.
+helix
+neovim
+tree-sitter-cli
+
+# TUI tools
+btop
+lazygit
+lazydocker
+superfile
+cava
+fastfetch
+mise
+uv
+
+# Used by the shell config and its aliases
+starship
+atuin
+zoxide
+fzf
+eza
+bat
+ripgrep
+fd
+
+# Needed by the configs: pager, man pages, and the bar's scripts
+less
+man-db
+jq
+lm_sensors

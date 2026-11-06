@@ -1,0 +1,5 @@
+docker
+docker-compose
+docker-buildx
+github-cli
+rust

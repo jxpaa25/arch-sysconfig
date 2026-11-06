@@ -28,7 +28,8 @@ install_pkgs() {
   sudo pacman -S --needed --noconfirm -- "${pkgs[@]}"
 }
 
-# Install AUR packages from one or more lists, removing build-only tools afterwards.
+# Install AUR packages from one or more lists, removing build-only tools and yay's build
+# directories afterwards. Those only speed up rebuilds, and can run to hundreds of MB.
 install_aur() {
   local list pkgs=()
   for list in "$@"; do
@@ -36,6 +37,10 @@ install_aur() {
   done
   ((${#pkgs[@]})) || return 0
   yay -S --needed --noconfirm --removemake --answerclean None --answerdiff None -- "${pkgs[@]}"
+  local pkg
+  for pkg in "${pkgs[@]}"; do
+    rm -rf "${HOME:?}/.cache/yay/$pkg"
+  done
 }
 
 # Note that the initramfs has to be rebuilt once the current run finishes.

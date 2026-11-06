@@ -1,0 +1,5 @@
+# Everything else comes from the official repos.
+zen-browser-bin
+herdr-bin
+claude-code
+ufw-docker

@@ -1,0 +1,12 @@
+zathura
+zathura-pdf-mupdf
+zathura-cb
+tdf
+imv
+mpv
+yazi
+grim
+slurp
+bluez
+bluez-utils
+bluetui

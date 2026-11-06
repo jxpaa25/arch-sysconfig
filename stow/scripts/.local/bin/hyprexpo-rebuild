@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+# Build the hyprexpo workspace overview plugin. A plugin only loads into the exact
+# Hyprland version it was built against, so rerun this after every Hyprland update,
+# then log out and back in.
+set -euo pipefail
+
+src="$HOME/.local/src/hyprexpo"
+
+if [[ -d $src/.git ]]; then
+  git -C "$src" pull --ff-only
+else
+  mkdir -p "$(dirname "$src")"
+  git clone https://github.com/sandwichfarm/hyprexpo "$src"
+fi
+
+make -C "$src" all
