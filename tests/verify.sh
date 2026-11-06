@@ -49,9 +49,9 @@ if command -v yay >/dev/null; then pass 'AUR helper'; else fail 'AUR helper' 'ya
 for dev in /sys/bus/pci/devices/*; do
   [[ $(<"$dev/class") == 0x03* ]] || continue
   case "$(<"$dev/vendor")" in
-    0x8086) gpu=gpu-intel ;;
-    0x1002) gpu=gpu-amd ;;
-    0x10de) gpu=gpu-nvidia ;;
+    0x8086) gpu="gpu-intel" ;;
+    0x1002) gpu="gpu-amd" ;;
+    0x10de) gpu="gpu-nvidia" ;;
     *) continue ;;
   esac
   check_list "$gpu"
@@ -133,11 +133,13 @@ clean_tree 'The install left tracked files alone'
 
 echo '--- Desktop session'
 export XDG_RUNTIME_DIR="${XDG_RUNTIME_DIR:-/run/user/$(id -u)}"
-HYPRLAND_INSTANCE_SIGNATURE="$(ls -t "$XDG_RUNTIME_DIR/hypr" 2>/dev/null | head -n1)"
+HYPRLAND_INSTANCE_SIGNATURE="$(find "$XDG_RUNTIME_DIR/hypr" -mindepth 1 -maxdepth 1 -printf '%T@ %f\n' 2>/dev/null | sort -rn | head -n1 | cut -d' ' -f2)"
 if [[ -z $HYPRLAND_INSTANCE_SIGNATURE ]] || ! HYPRLAND_INSTANCE_SIGNATURE=$HYPRLAND_INSTANCE_SIGNATURE hyprctl version >/dev/null 2>&1; then
   skip 'Session checks' 'Hyprland is not running'
 else
   export HYPRLAND_INSTANCE_SIGNATURE
+  # qs prints a warning into its output when no locale is set, as over SSH.
+  export LANG="${LANG:-C.UTF-8}"
   socket="$(find "$XDG_RUNTIME_DIR" -maxdepth 1 -type s -name 'wayland-*' -printf '%f\n' | sort | head -n1)"
   export WAYLAND_DISPLAY="${WAYLAND_DISPLAY:-$socket}"
 

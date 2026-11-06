@@ -29,7 +29,7 @@ Start from a fresh Arch install with a normal user who can use `sudo`, and a wor
 btrfs and Limine. Other setups work too, and simply go without bootable snapshots.
 
 ```bash
-sudo pacman -S --needed git
+sudo pacman -Syu --needed git
 git clone https://github.com/jxpaa25/arch-sysconfig.git
 cd arch-sysconfig
 ./install.sh
