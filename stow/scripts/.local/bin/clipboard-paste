@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+# Put a clipboard history entry back on the clipboard and paste it into the focused window.
+# Usage: clipboard-paste <cliphist id>
+set -euo pipefail
+
+printf '%s\n' "$1" | cliphist decode | wl-copy
+sleep 0.15
+wtype -M shift -k Insert -m shift

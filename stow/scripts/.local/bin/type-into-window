@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+# Paste some text into the focused window without leaving it on the clipboard or in history.
+# Usage: type-into-window <text>
+set -euo pipefail
+
+printf '%s' "$1" | wl-copy --type text/plain --sensitive --foreground &
+copy=$!
+trap 'kill "$copy" 2>/dev/null || true' EXIT
+sleep 0.15
+wtype -M shift -k Insert -m shift
+sleep 0.2

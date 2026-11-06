@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+# Lock the screen before the machine suspends. Holds a logind delay inhibitor, so suspend
+# waits until the lock screen is up. Run by desk-sleep-lock.service, which restarts it to
+# take a new inhibitor for the next suspend.
+set -euo pipefail
+
+if [[ ${1:-} != --inhibited ]]; then
+  exec systemd-inhibit --what=sleep --mode=delay --who=desk --why="Lock the screen before suspending" "$0" --inhibited
+fi
+
+while IFS= read -r line; do
+  [[ $line == *"boolean true"* ]] || continue
+  qs ipc call lock lock >/dev/null 2>&1 || true
+  # logind waits at most InhibitDelayMaxSec for this.
+  for _ in {1..30}; do
+    [[ $(qs ipc call lock status 2>/dev/null) == secure ]] && break
+    sleep 0.1
+  done
+  exit 0
+done < <(exec dbus-monitor --system 2>/dev/null \
+  "type='signal',sender='org.freedesktop.login1',interface='org.freedesktop.login1.Manager',member='PrepareForSleep'")

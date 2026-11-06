@@ -12,11 +12,15 @@ PanelWindow {
 
   property bool shown: false
   property color scrim: "transparent"
-  property var targetScreen: null
+  // Where it opens. By default that's wherever the focus is at the moment it opens.
+  property var fixedScreen: null
+  property var focusedScreen: null
+
+  readonly property var targetScreen: fixedScreen || focusedScreen
 
   signal dismissed
 
-  onShownChanged: if (shown) targetScreen = Panels.screenByName(Panels.focusedScreenName())
+  onShownChanged: if (shown) focusedScreen = Panels.screenByName(Panels.focusedScreenName())
 
   screen: targetScreen
   visible: shown && targetScreen !== null

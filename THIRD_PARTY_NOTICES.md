@@ -6,8 +6,10 @@ Parts of this repo are derived from [Omarchy](https://github.com/omacom/omarchy)
 the MIT licence below.
 
 That covers the system tuning values in `system/common/etc` and `system/nvidia/etc`, the Hyprland
-defaults merged into `stow/hypr`, the themes in `themes/`, and the terminal, tmux, herdr, LazyVim and
-XCompose defaults in `stow/`.
+defaults merged into `stow/hypr`, the themes in `themes/`, the terminal, tmux, herdr, LazyVim and
+XCompose defaults in `stow/`, and the Quickshell shell in `stow/quickshell`. The shell is a smaller
+rewrite that follows the look and behaviour of Omarchy's, and takes its colour handling, keyboard layout
+and clock logic, the lock screen's PAM file, and the emoji list (`Pickers/emojis.json`) from it.
 
 ```
 Copyright (c) David Heinemeier Hansson

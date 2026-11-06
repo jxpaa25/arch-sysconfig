@@ -9,6 +9,11 @@ import qs.Bar
 import qs.Menu
 import qs.Notifications
 import qs.Osd
+import qs.Lock
+import qs.Idle
+import qs.Polkit
+import qs.Pickers
+import qs.Panels
 
 // The desktop shell, one long-running process. Each surface lives in its own directory
 // and everything else talks to it over `qs ipc call <target> <function>`.
@@ -18,6 +23,13 @@ ShellRoot {
   Menu {}
   Notifications {}
   Osd {}
+  Lock { id: lock }
+  Idle { lockScreen: lock }
+  Polkit {}
+  Clipboard {}
+  Emoji {}
+  Wallpaper {}
+  PanelHost {}
 
   IpcHandler {
     target: "shell"

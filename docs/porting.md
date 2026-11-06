@@ -22,3 +22,9 @@ Decisions and differences to carry into Step 3, the port of the Omarchy-based co
 - Neovim's colours come from `aether.nvim`, which Omarchy's authors publish on GitHub (`omacom/aether.nvim`).
   It's an ordinary plugin taking a palette, with no dependency on Omarchy itself, and it's what makes
   both themes match your current look.
+- The screensaver is a wandering clock drawn by the shell. Omarchy's terminal text effects need
+  `terminaltexteffects`, which isn't in Arch's repos.
+- Clipboard history uses `cliphist` instead of Omarchy's own capture script. `pass-menu` copies with
+  `wl-copy --sensitive` so passwords stay out of it. A plain `pass -c` in a terminal doesn't mark its copy
+  as sensitive, so a password copied that way does land in the history. Use the picker, or
+  `cliphist wipe` afterwards.

@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
-# Pick a `pass` entry from the menu and copy its password. pass clears it after 45 seconds.
+# Pick a `pass` entry from the menu and copy its password, clearing it after 45 seconds.
+# It doesn't use `pass -c`, which would put the password in the clipboard history: copying
+# with --sensitive tells the history to skip it.
 shopt -s nullglob globstar
 
 prefix=${PASSWORD_STORE_DIR:-$HOME/.password-store}
@@ -15,8 +17,20 @@ files=("${files[@]%.gpg}")
 entry=$(printf '%s\n' "${files[@]}" | menu-pick "Passwords") || exit 0
 [[ -n $entry ]] || exit 0
 
-if pass show -c "$entry" >/dev/null 2>&1; then
-  notify-send "pass" "Copied $entry (clears in 45s)"
-else
+# Only the first line is the password. A failed decrypt leaves nothing to copy.
+password=$(pass show "$entry" 2>/dev/null | head -n 1)
+if [[ -z $password ]]; then
   notify-send "pass" "Failed to decrypt $entry"
+  exit 1
+fi
+
+printf '%s' "$password" | wl-copy --sensitive
+fingerprint=$(printf '%s' "$password" | sha256sum)
+unset password
+notify-send "pass" "Copied $entry (clears in 45s)"
+
+# Leave the clipboard alone if something else has been copied in the meantime.
+sleep 45
+if [[ $(wl-paste --no-newline 2>/dev/null | sha256sum) == "$fingerprint" ]]; then
+  wl-copy --clear
 fi

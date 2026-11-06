@@ -8,20 +8,20 @@ import Quickshell.Hyprland
 Singleton {
   id: root
 
-  // Panel ids in bar order, for the SUPER CTRL + number binds.
+  // Panel ids in bar order, for the SUPER CTRL + number binds and for Tab inside a panel.
   readonly property var order: ["bluetooth", "network", "audio", "monitor", "power", "clock", "worldclock"]
 
   property string current: ""
   property var anchor: null
   property var screen: null
-  property var anchors: ({})
+  property var targets: ({})
 
   function register(id, screenName, item) {
-    anchors[id + "@" + screenName] = item
+    targets[id + "@" + screenName] = item
   }
 
   function unregister(id, screenName, item) {
-    if (anchors[id + "@" + screenName] === item) delete anchors[id + "@" + screenName]
+    if (targets[id + "@" + screenName] === item) delete targets[id + "@" + screenName]
   }
 
   function screenByName(name) {
@@ -36,20 +36,28 @@ Singleton {
     return Hyprland.focusedMonitor ? Hyprland.focusedMonitor.name : ""
   }
 
-  function open(id, item) {
-    var name = focusedScreenName()
-    var target = item || anchors[id + "@" + name]
-    if (!target) {
-      for (var key in anchors) {
-        if (key.indexOf(id + "@") === 0) {
-          target = anchors[key]
-          break
-        }
-      }
+  function targetFor(id) {
+    var target = targets[id + "@" + focusedScreenName()]
+    if (target) return target
+    for (var key in targets) {
+      if (key.indexOf(id + "@") === 0) return targets[key]
     }
+    return null
+  }
+
+  // Only the ones you can see on the bar. A machine with no Bluetooth has no such panel.
+  function available() {
+    return order.filter(function(id) {
+      var target = root.targetFor(id)
+      return target && target.visible
+    })
+  }
+
+  function open(id, item) {
+    var target = item || targetFor(id)
     if (!target) return
     anchor = target
-    screen = target.QsWindow && target.QsWindow.window ? target.QsWindow.window.screen : screenByName(name)
+    screen = target.QsWindow && target.QsWindow.window ? target.QsWindow.window.screen : screenByName(focusedScreenName())
     current = id
   }
 
@@ -64,7 +72,14 @@ Singleton {
   }
 
   function toggleAt(position) {
-    var id = order[position - 1]
+    var id = available()[position - 1]
     if (id) toggle(id)
+  }
+
+  function step(delta) {
+    var ids = available()
+    if (!ids.length) return
+    var at = ids.indexOf(current)
+    open(ids[(at + delta + ids.length) % ids.length])
   }
 }

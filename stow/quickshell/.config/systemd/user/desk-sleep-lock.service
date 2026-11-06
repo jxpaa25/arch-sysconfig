@@ -1,0 +1,12 @@
+[Unit]
+Description=Lock the screen before suspending
+PartOf=graphical-session.target
+After=desk-shell.service
+
+[Service]
+ExecStart=%h/.local/bin/sleep-lock-monitor
+Restart=always
+RestartSec=2
+
+[Install]
+WantedBy=graphical-session.target

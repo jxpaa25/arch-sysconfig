@@ -18,7 +18,7 @@ hyprland() {
 tmux_keys() {
   # The list needs a running server, and a server with no sessions exits straight away.
   tmux start-server \; list-keys -T prefix -N 2>/dev/null |
-    sed -E 's/^(\S+)\s+/C-a \1\t/' | awk -F'\t' '{print $2 "\t" $1}'
+    sed -E 's/^(\S+ \S+)\s+/\1\t/' | awk -F'\t' '{print $2 "\t" $1}'
 }
 
 herdr_keys() {
