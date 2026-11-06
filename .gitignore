@@ -1,0 +1,38 @@
+# VM artifacts belong in ~/VMs/images, never in this repo
+*.iso
+*.iso.sig
+*.qcow2
+*.img
+*.fd
+
+# No images in the repo (see CLAUDE.md)
+*.png
+*.jpg
+*.jpeg
+*.webp
+*.gif
+*.bmp
+
+# Secrets
+*.pem
+*.key
+id_rsa*
+id_ed25519*
+*_ed25519
+*_ed25519.pub
+.env
+.env.*
+
+# App runtime state that must not land in stow packages
+*.log
+*.sock
+*.bak
+*.bak.*
+__pycache__/
+*.pyc
+session.json
+release-notes.json
+lazy-lock.json.bak
+
+# Local tooling
+.claude/settings.local.json
