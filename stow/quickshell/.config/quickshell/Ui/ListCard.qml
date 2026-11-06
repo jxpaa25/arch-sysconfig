@@ -22,6 +22,7 @@ FocusScope {
   readonly property int listHeight: Math.min(list.contentHeight, maxRows * rowHeight)
 
   signal activated(var row)
+  signal deleted(var row)
   signal back
   signal cancelled
 
@@ -104,6 +105,9 @@ FocusScope {
       case Qt.Key_J:
         if (!ctrl) return
         root.move(1)
+        break
+      case Qt.Key_Delete:
+        if (root.rows.length) root.deleted(root.rows[root.selected])
         break
       case Qt.Key_Right:
         if (text || !root.rows.length || !root.rows[root.selected].more) return

@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+# Change the screen or keyboard brightness and show the new level on screen.
+# UNTESTED until it runs on real hardware; the VM has no backlight.
+# Usage: brightness-set [--keyboard] <brightnessctl value, such as 5%+>
+set -euo pipefail
+
+if [[ ${1:-} == --keyboard ]]; then
+  shift
+  percent=$(brightnessctl -m --device='*kbd_backlight*' set "$1" | cut -d, -f4 | tr -d '%')
+  qs ipc call osd keyboardBacklight "$percent" >/dev/null 2>&1 || true
+else
+  percent=$(brightnessctl -m --class=backlight set "$1" | cut -d, -f4 | tr -d '%')
+  qs ipc call osd brightness "$percent" >/dev/null 2>&1 || true
+fi

@@ -58,10 +58,9 @@ desk.bind("SUPER + CTRL + comma", "Control notifications with the keyboard", ipc
 desk.bind("SUPER + SHIFT + ALT + comma", "Notification history", ipc("notifications", "history"))
 desk.bind("SUPER + CTRL + ALT + comma", "Silence notifications", ipc("notifications", "toggleSilence"))
 
--- Session. These work on the lock screen too, so the display can still be controlled.
+-- Session.
 desk.bind("SUPER + CTRL + L", "Lock", ipc("lock", "lock"))
 desk.bind("SUPER + CTRL + I", "Toggle locking on idle", ipc("idle", "toggleStayAwake"))
-desk.bind("SUPER + CTRL + T", "Toggle touchpad", "toggle-touchpad", { locked = true })
 
 -- Capture.
 desk.bind("ALT + PRINT", "Screen recording", "screen-record")

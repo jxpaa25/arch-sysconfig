@@ -7,6 +7,8 @@ import qs.Commons
 import qs.Background
 import qs.Bar
 import qs.Menu
+import qs.Notifications
+import qs.Osd
 
 // The desktop shell, one long-running process. Each surface lives in its own directory
 // and everything else talks to it over `qs ipc call <target> <function>`.
@@ -14,6 +16,8 @@ ShellRoot {
   Background {}
   Bar {}
   Menu {}
+  Notifications {}
+  Osd {}
 
   IpcHandler {
     target: "shell"
