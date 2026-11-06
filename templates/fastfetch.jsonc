@@ -1,0 +1,42 @@
+{
+  "$schema": "https://github.com/fastfetch-cli/fastfetch/raw/dev/doc/json_schema.json",
+  "logo": {
+    "source": "arch_small",
+    "padding": {
+      "top": 2,
+      "right": 6,
+      "left": 2
+    }
+  },
+  "display": {
+    "disableLinewrap": true,
+    "separator": " : ",
+    "color": { "keys": "white", "output": "white" }
+  },
+  "modules": [
+    "break",
+    "break",
+    { "type": "custom", "format": "{{ACCENT_ANSI}}┌─────────────────────────────────────────────────────┐" },
+    { "type": "os",       "key": "  \u001b[38;2;176;176;176m\u001b[37m  OS      ", "format": "{pretty-name}" },
+    { "type": "kernel",   "key": "  \u001b[38;2;176;176;176m\u001b[37m  Kernel  ", "format": "{release}" },
+    { "type": "packages", "key": "  \u001b[38;2;176;176;176m󰏖\u001b[37m  Packages" },
+    { "type": "display",  "key": "  \u001b[38;2;176;176;176m󰍹\u001b[37m  Display ", "format": "{width}x{height} @ {refresh-rate}Hz ({type})" },
+    { "type": "terminal", "key": "  \u001b[38;2;176;176;176m\u001b[37m  Terminal" },
+    { "type": "wm",       "key": "  \u001b[38;2;176;176;176m\u001b[37m  WM      ", "format": "{pretty-name}" },
+    { "type": "custom", "format": "{{ACCENT_ANSI}}└─────────────────────────────────────────────────────┘" },
+    "break",
+    { "type": "custom", "format": "{{ACCENT_ANSI}}┌─────────────────────────────────────────────────────┐" },
+    { "type": "cpu",    "key": "  \u001b[38;2;176;176;176m\u001b[37m  CPU     ", "format": "{name} @ {freq-max}" },
+    { "type": "gpu",    "key": "  \u001b[38;2;176;176;176m󰢮\u001b[37m  GPU     ", "format": "{name}" },
+    { "type": "memory", "key": "  \u001b[38;2;176;176;176m\u001b[37m  Memory  " },
+    {
+      "type": "command",
+      "key": "  \u001b[38;2;176;176;176m\u001b[37m  OS Age  ",
+      "text": "echo $(( ($(date +%s) - $(stat -c %W /)) / 86400 )) days"
+    },
+    { "type": "uptime", "key": "  \u001b[38;2;176;176;176m󰅐\u001b[37m  Uptime  " },
+    { "type": "custom", "format": "{{ACCENT_ANSI}}└─────────────────────────────────────────────────────┘" },
+    "break",
+    { "type": "colors", "symbol": "circle", "paddingLeft": 2 }
+  ]
+}

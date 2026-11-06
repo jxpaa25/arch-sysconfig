@@ -24,3 +24,12 @@ for pkg_dir in "$REPO_DIR"/stow/*/; do
   # next to their config don't end up writing them into this repo.
   stow --dir "$REPO_DIR/stow" --target "$HOME" --no-folding --restow "$pkg"
 done
+
+# Themes and templates are read by theme-set at runtime, so link them rather than stow them.
+mkdir -p "$HOME/.local/share/desk"
+ln -sfn "$REPO_DIR/themes" "$HOME/.local/share/desk/themes"
+ln -sfn "$REPO_DIR/templates" "$HOME/.local/share/desk/templates"
+
+# git config --global writes to ~/.gitconfig when it exists, and otherwise to the stowed
+# ~/.config/git/config, where your identity would end up in this repo. Both get read.
+touch "$HOME/.gitconfig"

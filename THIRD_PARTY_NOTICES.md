@@ -5,7 +5,9 @@
 Parts of this repo are derived from [Omarchy](https://github.com/omacom/omarchy), used under
 the MIT licence below.
 
-So far that covers the system tuning values in `system/common/etc` and `system/nvidia/etc`.
+That covers the system tuning values in `system/common/etc` and `system/nvidia/etc`, the Hyprland
+defaults merged into `stow/hypr`, the themes in `themes/`, and the terminal, tmux, herdr, LazyVim and
+XCompose defaults in `stow/`.
 
 ```
 Copyright (c) David Heinemeier Hansson

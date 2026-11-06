@@ -1,0 +1,54 @@
+#!/usr/bin/env bash
+# Switch every app to a theme. Usage: theme-set <vantablack|ultrawhite>
+# Never edits files in the repo: everything theme-dependent is a symlink to the current
+# theme, or a generated file outside stow.
+set -euo pipefail
+
+name=${1:-}
+themes="$HOME/.local/share/desk/themes"
+templates="$HOME/.local/share/desk/templates"
+[[ -d $themes/$name && -n $name ]] || {
+  echo "Usage: theme-set <vantablack|ultrawhite>" >&2
+  exit 2
+}
+
+state="$HOME/.local/state/theme"
+current="$state/current"
+config="${XDG_CONFIG_HOME:-$HOME/.config}"
+
+mkdir -p "$state"
+ln -sfn "$themes/$name" "$current"
+
+# Apps that find their theme through a link to the current theme.
+mkdir -p "$config/helix/themes" "$config/btop/themes" "$config/nvim/lua/plugins"
+ln -sfn "$current/helix.toml" "$config/helix/themes/current.toml"
+ln -sfn "$current/btop.theme" "$config/btop/themes/current.theme"
+ln -sfn "$current/neovim.lua" "$config/nvim/lua/plugins/theme.lua"
+
+# Apps with no way to include another file get a generated config.
+mkdir -p "$config/superfile/theme" "$config/fastfetch"
+ln -sfn "$current/superfile.toml" "$config/superfile/theme/$name.toml"
+sed "s/{{THEME}}/$name/" "$templates/superfile-config.toml" >"$config/superfile/config.toml"
+
+accent=$(sed -n 's/^accent *= *"#\(.*\)"/\1/p' "$current/colors.toml")
+ansi=$(printf '\\\\u001b[38;2;%d;%d;%dm' "0x${accent:0:2}" "0x${accent:2:2}" "0x${accent:4:2}")
+sed "s/{{ACCENT_ANSI}}/$ansi/g" "$templates/fastfetch.jsonc" >"$config/fastfetch/config.jsonc"
+
+# GTK and browsers follow the system colour scheme.
+if [[ -n ${DBUS_SESSION_BUS_ADDRESS:-} ]]; then
+  if grep -q '^mode *= *"light"' "$current/colors.toml"; then
+    gsettings set org.gnome.desktop.interface color-scheme prefer-light
+    gsettings set org.gnome.desktop.interface gtk-theme Adwaita
+  else
+    gsettings set org.gnome.desktop.interface color-scheme prefer-dark
+    gsettings set org.gnome.desktop.interface gtk-theme Adwaita-dark
+  fi
+fi
+
+# Tell running apps. Neovim picks it up itself, when the theme.lua link changes.
+pkill -USR2 -x ghostty || true
+pkill -USR2 -x btop || true
+pkill -USR1 -x helix || true
+if [[ -n ${HYPRLAND_INSTANCE_SIGNATURE:-} ]]; then
+  hyprctl reload >/dev/null
+fi
