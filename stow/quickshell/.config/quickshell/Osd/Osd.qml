@@ -152,7 +152,7 @@ Scope {
       root.show(String.fromCodePoint(0xF0B8C), percent / 100, "")
     }
     function message(text: string): void {
-      root.show(String.fromCodePoint(0xF02D6), -1, text)
+      root.show(String.fromCodePoint(0xF02FC), -1, text)
     }
   }
 }

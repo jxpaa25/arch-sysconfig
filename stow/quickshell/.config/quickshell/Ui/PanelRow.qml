@@ -10,6 +10,7 @@ Item {
   property string label: ""
   property string detail: ""
   property string trailing: ""
+  property bool trailingStrong: false
   property bool selected: false
   // -1 means this isn't a switch.
   property int toggled: -1
@@ -92,9 +93,9 @@ Item {
       text: root.trailing
       textFormat: Text.PlainText
       color: Theme.popup.text
-      opacity: 0.6
+      opacity: root.trailingStrong ? 1 : 0.6
       font.family: Style.font.family
-      font.pixelSize: Style.font.small
+      font.pixelSize: root.trailingStrong ? Style.font.heading : Style.font.small
     }
 
     // The switch.

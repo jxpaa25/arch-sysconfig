@@ -67,6 +67,7 @@ PanelBase {
       label: modelData.name
       detail: modelData.day + "  " + modelData.offset
       trailing: modelData.time
+      trailingStrong: true
     }
   }
 }
