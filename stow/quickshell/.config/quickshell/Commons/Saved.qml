@@ -19,6 +19,7 @@ Singleton {
   FileView {
     id: file
     path: root.dir + "/shell.json"
+    printErrors: false
     onAdapterUpdated: writeAdapter()
     onLoadFailed: function(error) {
       if (error === FileViewError.FileNotFound) writeAdapter()
