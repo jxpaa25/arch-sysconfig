@@ -1,0 +1,147 @@
+onboarding = false
+# Mirrors the tmux config in ~/.config/tmux/tmux.conf
+# tmux session -> herdr workspace, tmux window -> herdr tab, tmux pane -> herdr pane
+
+[theme]
+# tmux ran on the terminal's own palette (bg=default, fg=default, ANSI blue accents)
+name = "terminal"
+
+[theme.custom]
+# The active tab is drawn as panel_bg text on an accent background, so panel_bg
+# has to be dark for it to read - same colors as status-left's "#[fg=black,bg=blue]"
+panel_bg = "reset"
+surface_dim = "black"
+
+[terminal]
+# Matches -c "#{pane_current_path}" on every split, window, and session
+new_cwd = "follow"
+
+[keys]
+prefix = "ctrl+space"
+# tmux also had prefix2 C-b; herdr takes a single prefix
+
+# Config and help
+reload_config = "prefix+q"
+help = "prefix+?"
+detach = "prefix+d"
+# herdr's default prefix+s goes to goto below (tmux choose-session)
+settings = "prefix+shift+s"
+
+# Copy mode (vi keys are built in: v/space select, y/enter copy, q/esc leave)
+copy_mode = "prefix+["
+
+# Panes. tmux's stock " and % splits work alongside the custom h/v
+split_horizontal = ["prefix+h", "alt+enter", 'prefix+"']
+split_vertical = ["prefix+v", "alt+shift+enter", "prefix+%"]
+close_pane = ["prefix+x", "alt+esc"]
+zoom = "prefix+z"
+last_pane = "prefix+;"
+# tmux's select-pane -t :.+ on prefix+o
+cycle_pane_next = ["prefix+o", "prefix+tab"]
+cycle_pane_previous = "prefix+shift+tab"
+
+# Direct chords, plus tmux's stock prefix+arrows
+focus_pane_left = ["ctrl+alt+left", "prefix+left"]
+focus_pane_down = ["ctrl+alt+down", "prefix+down"]
+focus_pane_up = ["ctrl+alt+up", "prefix+up"]
+focus_pane_right = ["ctrl+alt+right", "prefix+right"]
+
+# herdr's defaults are prefix+shift+h/j/k/l, and prefix+shift+k closes the
+# workspace below, so swaps live on the arrows next to focus and resize
+swap_pane_left = "prefix+shift+left"
+swap_pane_down = "prefix+shift+down"
+swap_pane_up = "prefix+shift+up"
+swap_pane_right = "prefix+shift+right"
+
+resize_mode = ["prefix+ctrl+left", "prefix+ctrl+down", "prefix+ctrl+up", "prefix+ctrl+right"]
+
+# Like resize-pane on C-M-S-arrows
+resize_pane_left = "ctrl+alt+shift+left"
+resize_pane_down = "ctrl+alt+shift+down"
+resize_pane_up = "ctrl+alt+shift+up"
+resize_pane_right = "ctrl+alt+shift+right"
+
+# No tmux equivalent; herdr's default prefix+shift+p is taken by previous session
+rename_pane = "prefix+shift+o"
+
+# Windows -> tabs. tmux's stock prefix+, and prefix+& too
+new_tab = "prefix+c"
+rename_tab = ["prefix+r", "prefix+comma"]
+close_tab = ["prefix+k", "prefix+&"]
+switch_tab = ["prefix+1..9", "alt+1..9"]
+previous_tab = ["prefix+p", "alt+left"]
+next_tab = ["prefix+n", "alt+right"]
+
+# Like swap-window -t -1/+1 on M-S-Left/Right
+move_tab_previous = "alt+shift+left"
+move_tab_next = "alt+shift+right"
+
+# Sessions -> spaces (herdr workspaces). tmux's stock prefix+$ and prefix+( )
+new_workspace = "prefix+shift+c"
+rename_workspace = ["prefix+shift+r", "prefix+$"]
+close_workspace = "prefix+shift+k"
+previous_workspace = ["prefix+shift+p", "alt+up", "prefix+("]
+next_workspace = ["prefix+shift+n", "alt+down", "prefix+)"]
+# Spaces by sidebar position, the way alt+1..9 picks tabs
+switch_workspace = "ctrl+alt+1..9"
+
+# Pickers: prefix+w opens navigate mode on the Spaces list (like tmux
+# choose-tree), prefix+s/g the fuzzy session navigator (like choose-session)
+workspace_picker = "prefix+w"
+goto = ["prefix+s", "prefix+g"]
+
+# Agents. Arrows read as the sidebar does: alt+up/down walks spaces,
+# alt+shift+up/down walks the agents in the Agents panel. Both these and
+# prefix+alt+1..9 follow whatever the panel is showing (see prefix+shift+a)
+previous_agent = "alt+shift+up"
+next_agent = "alt+shift+down"
+focus_agent = "prefix+alt+1..9"
+
+# Only acts on a visible toast, and toasts are off; prefix+a below covers it
+open_notification_target = ""
+
+# space-scoped-agents plugin in ~/.config/herdr/plugins/
+[[keys.command]]
+key = "prefix+a"
+type = "plugin_action"
+command = "griffith.space-scoped-agents.attention"
+description = "agents: jump to next blocked/done agent, any space"
+
+[[keys.command]]
+key = "ctrl+alt+a"
+type = "plugin_action"
+command = "griffith.space-scoped-agents.attention"
+description = "agents: jump to next blocked/done agent, any space"
+
+[[keys.command]]
+key = "prefix+shift+a"
+type = "plugin_action"
+command = "griffith.space-scoped-agents.cycle"
+description = "agents panel: this space / + waiting elsewhere / all spaces"
+
+[ui]
+accent = "blue"
+
+# tmux drew single-line dividers between adjacent panes and no outer frame
+pane_gaps = false
+pane_outer_borders = false
+
+# tmux had no scrollbar column beside its panes
+pane_scrollbars = false
+
+# kill-window and kill-session never asked
+confirm_close = false
+
+# automatic-rename gave windows a name without prompting
+prompt_new_tab_name = false
+
+# set -g mouse on
+mouse_capture = true
+
+# status-right had the zoom flag followed by #h
+tab_bar_right = [{ type = "zoom" }, { type = "hostname" }]
+
+# set -g set-titles on / set -g set-titles-string '#h:#W', where tmux's #W was
+# the basename of the pane cwd. This is what Hyprland shows in the group bar,
+# and it resolves on the server so remote sessions name the remote host.
+window_title = "{hostname}: {workspace}"

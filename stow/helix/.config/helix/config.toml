@@ -1,0 +1,4 @@
+theme = "current"
+
+[editor.soft-wrap]
+enable = true

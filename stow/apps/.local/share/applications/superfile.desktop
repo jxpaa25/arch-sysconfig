@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Name=superfile
+Comment=Terminal file manager
+Exec=xdg-terminal-exec --app-id=org.desk.spf -e spf %f
+Terminal=false
+MimeType=inode/directory;
+Categories=System;FileTools;FileManager;

@@ -1,0 +1,4 @@
+[binds]
+
+# Trash the current image and quit the viewer (recoverable from the trash).
+<Ctrl+x> = exec gio trash -- "$imv_current_file"; quit

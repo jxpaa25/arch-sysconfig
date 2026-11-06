@@ -1,0 +1,50 @@
+# Scopes the Agents panel to the space selected in the Spaces panel, and jumps
+# to agents that are waiting on you.
+# Agent views are transient server state, so the startup hook re-applies the
+# saved mode every time the herdr server starts.
+
+id = "griffith.space-scoped-agents"
+name = "Space-Scoped Agents"
+version = "0.2.0"
+min_herdr_version = "0.8.0"
+description = "Scope the Agents panel to the selected space and jump to agents that need attention"
+platforms = ["linux"]
+
+[[startup]]
+command = ["python3", "space_scope.py", "sync"]
+
+[[actions]]
+id = "toggle"
+title = "Agents: toggle current space / all spaces"
+contexts = ["global"]
+command = ["python3", "space_scope.py", "toggle"]
+
+[[actions]]
+id = "cycle"
+title = "Agents: cycle current space / + waiting / all spaces"
+contexts = ["global"]
+command = ["python3", "space_scope.py", "cycle"]
+
+[[actions]]
+id = "attention"
+title = "Agents: jump to next agent needing attention"
+contexts = ["global"]
+command = ["python3", "space_scope.py", "attention"]
+
+[[actions]]
+id = "current"
+title = "Agents: only current space"
+contexts = ["global"]
+command = ["python3", "space_scope.py", "current"]
+
+[[actions]]
+id = "focus"
+title = "Agents: current space + waiting agents elsewhere"
+contexts = ["global"]
+command = ["python3", "space_scope.py", "focus"]
+
+[[actions]]
+id = "all"
+title = "Agents: all spaces"
+contexts = ["global"]
+command = ["python3", "space_scope.py", "all"]

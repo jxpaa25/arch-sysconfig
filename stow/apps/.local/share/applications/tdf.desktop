@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Name=tdf
+Comment=Terminal PDF viewer
+Exec=xdg-terminal-exec --app-id=org.desk.tdf -e tdf %f
+Terminal=false
+MimeType=application/pdf;
+Categories=Office;Viewer;
